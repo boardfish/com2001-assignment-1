@@ -39,10 +39,13 @@ scoreBoard b = if mod (fst (head b) + snd (last b)) 3 == 0
                            then quot ((fst (head b)) + (snd (last b))) 5
                            else 0)
 -- PSEUDOCODE (ideas) for functions to come
--- possPlays :: Hand -> Board -> Domino
--- possPlays h b = if goesP (head h) (head b) b || goesP (head h) (last b) b
---                    then head h
---                    else null
+possPlays :: Hand -> Board -> ([Domino], [Domino]) -> ([Domino], [Domino])
+possPlays [] b p = p
+possPlays h b p = if goesP (head h) (head b) b 
+                     then possPlays (tail h) b (head h:fst p, snd p)
+                     else (if goesP (head h) (last b) b
+                            then possPlays (tail h) b (fst p, head h:snd p)
+                            else possPlays (tail h) b (fst p, snd p))
 -- RETURN TYPE SHOULD BE A PAIR
 scoreN :: Board -> Int -> [Domino]
 scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], not(elem (x,y) b) && mod (x+y) s == 0]
