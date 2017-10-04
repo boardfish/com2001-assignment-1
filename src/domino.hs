@@ -1,3 +1,4 @@
+import Data.Maybe
 type Domino = (Int, Int)
 type End = Domino
 type Hand   = [Domino]
@@ -6,7 +7,7 @@ type Board  = [Domino]
 swap :: Domino -> Domino
 swap d = (snd d, fst d)
 playedP :: Domino -> Board -> Bool
-playedP d b = elem d b
+playedP d b = elem d b || elem (swap d) b
 goesP :: Domino -> End -> Board -> Bool
 goesP d e b = if e == (last b)
                  then (fst d) == (snd e) || (snd d) == (snd e)
@@ -26,19 +27,24 @@ knockingP h b = if null h
                             goesP (head h) (last b) b
                             then False
                             else knockingP (tail h) b)
-playDom :: Domino -> Board -> End -> Maybe [Domino]
+playDom :: Domino -> Board -> End -> Maybe Board
 playDom d b e = if goesP d e b && elem e b
                    then (if e == (head b)
                             then Just ((turnDomino d e b) : b)
                             else Just (b ++ [(turnDomino d e b)]))
                    else Nothing
+score :: Int -> Int -> Int
+score x y = if mod (x + y) 3 == 0
+               then quot (x + y) 3
+               else (if mod (x + y) 5 == 0
+                        then quot (x + y) 5
+                        else 0)
+scoreDom :: Domino -> Board -> End -> Int
+scoreDom d b e = if isJust (playDom d b e)
+                    then scoreBoard (fromJust (playDom d b e))
+                    else 0
 scoreBoard :: Board -> Int
-scoreBoard b = if mod (fst (head b) + snd (last b)) 3 == 0
-                  then quot ((fst (head b)) + (snd (last b))) 3
-                  else (if mod (fst (head b) + snd (last b)) 5 == 0
-                           then quot ((fst (head b)) + (snd (last b))) 5
-                           else 0)
--- PSEUDOCODE (ideas) for functions to come
+scoreBoard b = score (fst (head b)) (snd (last b))
 possPlays :: Hand -> Board -> ([Domino], [Domino]) -> ([Domino], [Domino])
 possPlays [] b p = p
 possPlays h b p = if goesP (head h) (head b) b 
@@ -46,6 +52,6 @@ possPlays h b p = if goesP (head h) (head b) b
                      else (if goesP (head h) (last b) b
                             then possPlays (tail h) b (fst p, head h:snd p)
                             else possPlays (tail h) b (fst p, snd p))
--- RETURN TYPE SHOULD BE A PAIR
+-- Comically missed the point here.
 scoreN :: Board -> Int -> [Domino]
-scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], not(elem (x,y) b) && mod (x+y) s == 0]
+scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], not(elem (x,y) b) && (scoreDom (x,y) b (head b) == s || scoreDom (x,y) b (last b) == s)]
