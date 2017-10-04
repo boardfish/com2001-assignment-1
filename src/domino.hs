@@ -18,9 +18,9 @@ playedP d b = elem d b || elem (swap d) b
 -- It takes a Domino (int pair) and a Board (list of Dominoes) 
 -- as parameters, and returns a Boolean.
 goesP :: Domino -> End -> Board -> Bool
-goesP d e b = if e == (last b)
-                 then (fst d) == (snd e) || (snd d) == (snd e)
-                 else (fst d) == (fst e) || (snd d) == (fst e)
+goesP d e b
+ | e == (last b) = (fst d) == (snd e) || (snd d) == (snd e)
+ | otherwise = (fst d) == (fst e) || (snd d) == (fst e)
 -- | The turnDomino function rotates a domino based on which end of the board
 -- it is being played at.
 -- It takes a Domino (int pair), an End (as Domino) and a Board (list of 
@@ -91,5 +91,14 @@ possPlays h b p = if goesP (head h) (head b) b
 -- that, if played, would result in the given score.
 -- It takes a Board and an Int representative of the desired score.
 -- It returns a list of Dominoes on completion.
+scoreNP :: Domino -> Board -> Int -> Bool
+scoreNP d b s = let notPlayed = not(playedP d b)
+                    scoreHead = scoreDom d b (head b) == s
+                    scoreTail = scoreDom d b (last b) == s
+                    scoreCorrect = scoreHead || scoreTail
+                    notDuplicate = (fst d)<=(snd d)
+                    goes = goesP d (head b) b || goesP d (last b) b
+                 in (notPlayed && scoreCorrect && notDuplicate && goes)
 scoreN :: Board -> Int -> [Domino]
-scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], not(elem (x,y) b) && (scoreDom (x,y) b (head b) == s || scoreDom (x,y) b (last b) == s)]
+scoreN [] 0 = [(x,y) | x <- [0..6], y<- [0..6], x<=y]
+scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], scoreNP (x,y) b s]
