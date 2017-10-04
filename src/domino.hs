@@ -3,15 +3,22 @@ type Domino = (Int, Int)
 type End = Domino
 type Hand   = [Domino]
 type Board  = [Domino]
--- Not sure if this is the fix but...
+-- | The swap function emulates rotating a domino by swapping the values in its 
+-- tuple.
 swap :: Domino -> Domino
 swap d = (snd d, fst d)
+-- | The playedP function determines whether a domino is on a given board in
+-- either possible rotation.
 playedP :: Domino -> Board -> Bool
 playedP d b = elem d b || elem (swap d) b
+-- | The goesP function determines whether or not a domino can be played at a 
+-- given end of the board.
 goesP :: Domino -> End -> Board -> Bool
 goesP d e b = if e == (last b)
                  then (fst d) == (snd e) || (snd d) == (snd e)
                  else (fst d) == (fst e) || (snd d) == (fst e)
+-- | The turnDomino function rotates a domino based on which end of the board
+-- it is being played at.
 turnDomino :: Domino -> End -> Board -> Domino
 turnDomino d e b = if e == (last b) 
                       then (if fst d == snd e
@@ -20,6 +27,9 @@ turnDomino d e b = if e == (last b)
                       else (if snd d == fst e
                                then d
                                else swap d)
+-- | The knockingP function determines whether or not a player should knock,
+-- based on the contents of their hand and whether or not they can play a
+-- domino.
 knockingP :: Hand -> Board -> Bool
 knockingP h b = if null h
                    then True
@@ -27,24 +37,35 @@ knockingP h b = if null h
                             goesP (head h) (last b) b
                             then False
                             else knockingP (tail h) b)
+-- | The playDom function returns an updated board featuring a given domino, if 
+-- that domino can be played at a given end of the board.
 playDom :: Domino -> Board -> End -> Maybe Board
 playDom d b e = if goesP d e b && elem e b
                    then (if e == (head b)
                             then Just ((turnDomino d e b) : b)
                             else Just (b ++ [(turnDomino d e b)]))
                    else Nothing
+-- | The score function returns the fives-and-threes score for two given values.
 score :: Int -> Int -> Int
 score x y = if mod (x + y) 3 == 0
                then quot (x + y) 3
                else (if mod (x + y) 5 == 0
                         then quot (x + y) 5
                         else 0)
+-- | The scoreDom function returns the score a given domino would give when
+-- played at a particular end of a given board. If the domino cannot be played
+-- there, 0 is returned.
 scoreDom :: Domino -> Board -> End -> Int
 scoreDom d b e = if isJust (playDom d b e)
                     then scoreBoard (fromJust (playDom d b e))
                     else 0
+-- | The scoreBoard function scores a given board using the outer dominoes'
+-- outer values.
 scoreBoard :: Board -> Int
 scoreBoard b = score (fst (head b)) (snd (last b))
+-- | The possPlays function lists all possible plays from a given hand, grouped
+-- by which end of the board they can be played at in a tuple of lists. Note
+-- that it takes an empty tuple of lists as the initial argument.
 possPlays :: Hand -> Board -> ([Domino], [Domino]) -> ([Domino], [Domino])
 possPlays [] b p = p
 possPlays h b p = if goesP (head h) (head b) b 
@@ -52,6 +73,7 @@ possPlays h b p = if goesP (head h) (head b) b
                      else (if goesP (head h) (last b) b
                             then possPlays (tail h) b (fst p, head h:snd p)
                             else possPlays (tail h) b (fst p, snd p))
--- Comically missed the point here.
+-- | The scoreN function returns all dominoes that are not yet on the board
+-- that, if played, would result in the given score.
 scoreN :: Board -> Int -> [Domino]
 scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], not(elem (x,y) b) && (scoreDom (x,y) b (head b) == s || scoreDom (x,y) b (last b) == s)]
