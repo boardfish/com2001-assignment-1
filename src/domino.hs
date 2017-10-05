@@ -18,6 +18,7 @@ playedP d b = elem d b || elem (swap d) b
 -- It takes a Domino (int pair) and a Board (list of Dominoes) 
 -- as parameters, and returns a Boolean.
 goesP :: Domino -> End -> Board -> Bool
+goesP d _ [] = True
 goesP d e b
  | e == (last b) = (fst d) == (snd e) || (snd d) == (snd e)
  | otherwise = (fst d) == (fst e) || (snd d) == (fst e)
@@ -26,11 +27,12 @@ goesP d e b
 -- It takes a Domino (int pair), an End (as Domino) and a Board (list of 
 -- Dominoes) as parameters, and returns a Boolean.
 turnDomino :: Domino -> End -> Board -> Domino
-turnDomino d e b = if e == (last b) 
-                      then (if fst d == snd e
+turnDomino d e [] = d
+turnDomino d e b = if e == (head b) 
+                      then (if snd d == fst e
                                then d
                                else swap d)
-                      else (if snd d == fst e
+                      else (if fst d == snd e
                                then d
                                else swap d)
 -- | The knockingP function determines whether or not a player should knock,
@@ -48,6 +50,7 @@ knockingP h b = if null h
 -- | The playDom function returns an updated board featuring a given domino, if 
 -- that domino can be played at a given end of the board.
 playDom :: Domino -> Board -> End -> Maybe Board
+playDom d [] _ = Just [d]
 playDom d b e = if goesP d e b && elem e b
                    then (if e == (head b)
                             then Just ((turnDomino d e b) : b)
@@ -75,6 +78,7 @@ scoreDom d b e = if isJust (playDom d b e)
 -- It takes a Domino (int pair), a Board (list of Dominoes), and an End (as 
 -- Domino) as parameters, and returns an integer.
 scoreBoard :: Board -> Int
+scoreBoard [] = 0
 scoreBoard b = score (fst (head b)) (snd (last b))
 -- | The possPlays function lists all possible plays from a given hand, grouped
 -- by which end of the board they can be played at in a tuple of lists. Note
@@ -92,6 +96,8 @@ possPlays h b p = if goesP (head h) (head b) b
 -- It takes a Board and an Int representative of the desired score.
 -- It returns a list of Dominoes on completion.
 scoreNP :: Domino -> Board -> Int -> Bool
+scoreNP d _ 0 = (fst d)<=(snd d)
+scoreNP d [] s = ((fst d)<=(snd d)) && ((score (fst d) (snd d)) == s)
 scoreNP d b s = let notPlayed = not(playedP d b)
                     scoreHead = scoreDom d b (head b) == s
                     scoreTail = scoreDom d b (last b) == s
@@ -100,5 +106,5 @@ scoreNP d b s = let notPlayed = not(playedP d b)
                     goes = goesP d (head b) b || goesP d (last b) b
                  in (notPlayed && scoreCorrect && notDuplicate && goes)
 scoreN :: Board -> Int -> [Domino]
-scoreN [] 0 = [(x,y) | x <- [0..6], y<- [0..6], x<=y]
+scoreN [] 0 = [(x,y) | x <- [0..6], y<- [0..6], x<=y && score x y == 0]
 scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], scoreNP (x,y) b s]
