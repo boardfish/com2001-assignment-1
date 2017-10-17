@@ -13,6 +13,18 @@ swap d = (snd d, fst d)
 -- It takes a Domino (int pair) as a parameter, and returns the same type.
 playedP :: Domino -> Board -> Bool
 playedP d b = elem d b || elem (swap d) b
+-- | The goesLeftP function determines whether a domino can be played in either configuration at the left side of the board.
+goesLeftP :: Domino -> End -> Bool
+goesLeftP d e = snd d == fst e || snd (swap d) == fst e
+-- | The goesRightP function determines whether a domino can be played in either configuration at the right side of the board.
+goesRightP :: Domino -> End -> Bool
+goesRightP d e = fst d == snd e || fst (swap d) == snd e
+-- | TODO
+goesEnds :: Domino -> Board -> (Bool, Bool)
+goesEnds _ [] = (True, True)
+goesEnds d b = let left = goesLeftP d (head b) 
+                   right = goesRightP d (last b) 
+                in ((left, right))
 -- | The goesP function determines whether or not a domino can be played at a 
 -- given end of the board.
 -- It takes a Domino (int pair) and a Board (list of Dominoes) 
@@ -20,21 +32,19 @@ playedP d b = elem d b || elem (swap d) b
 goesP :: Domino -> End -> Board -> Bool
 goesP d _ [] = True
 goesP d e b
- | e == (last b) = (fst d) == (snd e) || (snd d) == (snd e)
- | otherwise = (fst d) == (fst e) || (snd d) == (fst e)
+  | e == (head b) && e == (last b) = fst(goesEnds d b) || snd(goesEnds d b)
+  | e == (head b) = fst(goesEnds d b)
+  | e == (last b) = snd(goesEnds d b)
+  | otherwise = False
 -- | The turnDomino function rotates a domino based on which end of the board
 -- it is being played at.
--- It takes a Domino (int pair), an End (as Domino) and a Board (list of 
--- Dominoes) as parameters, and returns a Boolean.
+-- It takes a Domino (int pair) and an End (as Domino) as parameters, and returns a Domino.
 turnDomino :: Domino -> End -> Board -> Domino
 turnDomino d e [] = d
-turnDomino d e b = if e == (head b) 
-                      then (if snd d == fst e
-                               then d
-                               else swap d)
-                      else (if fst d == snd e
-                               then d
-                               else swap d)
+turnDomino d e b  
+  | fst(goesEnds d b) && snd d == fst e = d
+  | snd(goesEnds d b) && fst d == snd e = d
+  | otherwise = swap d
 -- | The knockingP function determines whether or not a player should knock,
 -- based on the contents of their hand and whether or not they can play a
 -- domino.
@@ -51,11 +61,10 @@ knockingP h b = if null h
 -- that domino can be played at a given end of the board.
 playDom :: Domino -> Board -> End -> Maybe Board
 playDom d [] _ = Just [d]
-playDom d b e = if goesP d e b && elem e b
-                   then (if e == (head b)
-                            then Just ((turnDomino d e b) : b)
-                            else Just (b ++ [(turnDomino d e b)]))
-                   else Nothing
+playDom d b e 
+  | fst(goesEnds d b) = Just ((turnDomino d e b) : b)
+  | snd(goesEnds d b) = Just (b ++ [(turnDomino d e b)])    
+  | otherwise = Nothing
 -- | The score function returns the fives-and-threes score for two given values.
 -- It takes a Domino (int pair), a Board (list of Dominoes), and an End (as 
 -- Domino) as parameters, and returns a Maybe Board if a valid move is made.
@@ -86,25 +95,25 @@ scoreBoard b = score (fst (head b)) (snd (last b))
 -- It takes a Board (list of Dominoes), and returns an integer.
 possPlays :: Hand -> Board -> ([Domino], [Domino]) -> ([Domino], [Domino])
 possPlays [] b p = p
-possPlays h b p = if goesP (head h) (head b) b 
-                     then possPlays (tail h) b (head h:fst p, snd p)
-                     else (if goesP (head h) (last b) b
-                            then possPlays (tail h) b (fst p, head h:snd p)
-                            else possPlays (tail h) b (fst p, snd p))
+possPlays h b p 
+  | fst(goesEnds (head h) b) && snd(goesEnds (head h) b) = possPlays (tail h) b (head h:fst p, head h:snd p)
+  | fst(goesEnds (head h) b) = possPlays (tail h) b (head h:fst p, snd p)
+  | snd(goesEnds (head h) b) = possPlays (tail h) b (fst p, head h:snd p)
+  | otherwise = possPlays (tail h) b (fst p, snd p)
 -- | The scoreN function returns all dominoes that are not yet on the board
 -- that, if played, would result in the given score.
 -- It takes a Board and an Int representative of the desired score.
 -- It returns a list of Dominoes on completion.
 scoreNP :: Domino -> Board -> Int -> Bool
-scoreNP d _ 0 = (fst d)<=(snd d)
 scoreNP d [] s = ((fst d)<=(snd d)) && ((score (fst d) (snd d)) == s)
 scoreNP d b s = let notPlayed = not(playedP d b)
                     scoreHead = scoreDom d b (head b) == s
                     scoreTail = scoreDom d b (last b) == s
                     scoreCorrect = scoreHead || scoreTail
                     notDuplicate = (fst d)<=(snd d)
-                    goes = goesP d (head b) b || goesP d (last b) b
+                    goesEndsRes = goesEnds d b
+                    goes = fst(goesEndsRes) || snd(goesEndsRes)
                  in (notPlayed && scoreCorrect && notDuplicate && goes)
 scoreN :: Board -> Int -> [Domino]
-scoreN [] 0 = [(x,y) | x <- [0..6], y<- [0..6], x<=y && score x y == 0]
+scoreN [] s = [(x,y) | x <- [0..6], y<- [0..6], x<=y && score x y == s]
 scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], scoreNP (x,y) b s]

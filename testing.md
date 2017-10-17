@@ -2,6 +2,13 @@
 
 ## swap
 
+### Tests
+
+```
+*Main> swap (1,2)
+(2,1)
+```
+
 ## score
 
 ### Tests
@@ -43,7 +50,18 @@ The greatest sum possible would be 12 ( a 6 on either end of the board). This me
 
 ## scoreDom
 
-This function returns the score given after a certain domino has been played, provided that is indeed possible. It is based on, and therefore its correctness is proven by, `playDom` and `scoreBoard`.
+This function returns the score given after a certain domino has been played, provided that is indeed possible. It is based on, and therefore its correctness is proven by, `playDom` and `scoreBoard` in combination.
+
+### Tests
+
+```
+*Main> scoreDom (0,3) [] (0,0)
+1
+*Main> scoreDom (7,7) [(0,0),(0,3)] (0,3)
+0
+*Main> scoreDom (3,5) [(0,0),(0,3)] (0,3)
+1
+```
 
 ## turnDomino
 
@@ -60,7 +78,7 @@ This function returns either a given domino or its swapped configuration, based 
 (0,1)
 ```
 
-### End provided for which the domino should not flip
+#### End provided for which the domino should not flip
 
 ```
 *Main> turnDomino (0,1) (1,2) [(1,2),(2,0)]
@@ -69,59 +87,68 @@ This function returns either a given domino or its swapped configuration, based 
 (0,1)
 ```
 
-### End provided that isn't on the board
-
-#### or board is empty
+#### Board is empty
 
 The original domino is returned in any case.
 
 ```
-*Main> turnDomino (0,1) (7,7) [(1,2),(2,0)]
-(1,0)
 *Main> turnDomino (0,1) (0,0) []
 (0,1)
+```
+
+#### End provided that isn't on the board
+
+Validation for whether or not an end exists is built into other methods at this point.
+
+TODO: Change that?
+
+```
+*Main> turnDomino (0,1) (7,7) [(1,2),(2,0)]
+(1,0)
 ```
 
 ## scoreNP
 
 This predicate returns whether or not playing a given domino would result in a given score. The logic is primarily inherited from the scoreDom helper function.
 
-### Domino would score at left
+### Tests
+
+#### Domino would score at left
 
 ```
 *Main> scoreNP (0,3) [(0,0),(0,2)] 1
 True
 ```
 
-### Domino would score at right
+#### Domino would score at right
 
 ```
 *Main> scoreNP (0,3) [(2,0),(0,0)] 1
 True
 ```
 
-### Domino would not score
+#### Domino would not score
 
 ```
 *Main> scoreNP (0,4) [(2,0),(0,0)] 1
 False
 ```
 
-### Domino would not be valid
+#### Domino would not be valid
 
 ```
 *Main> scoreNP (3,4) [(2,0),(0,0)] 1
 False
 ```
 
-### Domino would be first in play and result in a score
+#### Domino would be first in play and result in a score
 
 ```
 *Main> scoreNP (2,3) [] 1
 True
 ```
 
-### Domino would be first in play and not result in a score
+#### Domino would be first in play and not result in a score
 
 ```
 *Main> scoreNP (2,2) [] 1
@@ -214,6 +241,13 @@ True
 False
 ```
 
+#### Board is empty
+
+```
+*Main> knockingP [(0,1)] []
+False
+```
+
 ## playDom
 
 ### Tests
@@ -222,14 +256,14 @@ False
 
 ```
 *Main> playDom (2,5) [(3,2)] (3,2)
-Just [(2,5),(3,2)]
+Just [(3,2),(2,5)]
 ```
 
 #### Domino is playable in its flipped position
 
 ```
 *Main> playDom (2,5) [(3,5)] (3,5)
-Just [(5,2),(3,5)]
+Just [(3,5),(5,2)]
 ```
 
 #### Domino is not playable
@@ -246,6 +280,13 @@ An End must still be provided.
 ```
 *Main> playDom (1,0) [] (0,0)
 Just [(1,0)]
+```
+
+#### End is not on the board
+
+```
+*Main> playDom (2,5) [(3,4)] (7,7)
+Nothing
 ```
 
 ## scoreBoard
@@ -285,7 +326,10 @@ Just [(1,0)]
 
 #### Hand has a domino playable at either end
 
-TODO: Deal with this
+```
+*Main> possPlays [(3,5)] [(3,3)] ([],[])
+([(3,5)],[(3,5)])
+```
 
 #### Hand has no playable dominoes
 
@@ -305,7 +349,7 @@ TODO: Deal with this
 
 ```
 *Main> possPlays [(1,0),(2,3)] [] ([],[])
-([(2,3),(1,0)],[])
+([(2,3),(1,0)],[(2,3),(1,0)])
 ```
 
 #### Neither hand nor board has dominoes
@@ -325,8 +369,7 @@ Predicate function is `scoreNP`, hence if that is correct then so is scoreN.
 
 ```
 *Main> scoreN [] 0
-[(0,0),(0,1),(0,2),(0,4),(1,1),(1,3),(1,6),(2,2),(2,5),(2,6),(3,4),
-(3,5),(4,4),(5,6)]
+[(0,0),(0,1),(0,2),(0,4),(1,1),(1,3),(1,6),(2,2),(2,5),(2,6),(3,4),(3,5),(4,4),(5,6)]
 *Main> scoreN [] 1
 [(0,3),(0,5),(1,2),(1,4),(2,3)]
 *Main> scoreN [] 2
@@ -339,3 +382,15 @@ Predicate function is `scoreNP`, hence if that is correct then so is scoreN.
 
 #### Board has one or more dominoes
 
+```
+*Main> scoreN [(1,2)] 0
+[(0,1),(0,2),(1,5),(1,6),(2,3),(2,6)]
+*Main> scoreN [(1,2)] 1
+[(1,1),(1,3),(2,2),(2,4)]
+*Main> scoreN [(1,2)] 2
+[(1,4),(2,5)]
+*Main> scoreN [(1,2)] 3
+[]
+*Main> scoreN [(1,2)] 4
+[]
+```
