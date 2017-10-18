@@ -7,24 +7,28 @@ type Board  = [Domino]
 -- tuple.
 -- It takes a Domino (int pair) as an argument, and returns the same type.
 swap :: Domino -> Domino
-swap d = (snd d, fst d)
+swap (x,y) = (y,x)
 -- | The playedP function determines whether a domino is on a given board in
 -- either possible rotation.
 -- It takes a Domino (int pair) as a parameter, and returns the same type.
+defaultPositionP :: Domino -> Bool
+defaultPositionP (x,y) = x<=y
 playedP :: Domino -> Board -> Bool
 playedP d b = elem d b || elem (swap d) b
--- | The goesLeftP function determines whether a domino can be played in either configuration at the left side of the board.
+-- | The goesLeftP function determines whether a domino can be played in either
+-- configuration at the left side of the board.
 goesLeftP :: Domino -> End -> Bool
-goesLeftP d e = snd d == fst e || snd (swap d) == fst e
--- | The goesRightP function determines whether a domino can be played in either configuration at the right side of the board.
+goesLeftP (x,y) (e,z) = x == e || y == e
+-- | The goesRightP function determines whether a domino can be played in
+-- either configuration at the right side of the board.
 goesRightP :: Domino -> End -> Bool
-goesRightP d e = fst d == snd e || fst (swap d) == snd e
+goesRightP (x,y) (z,e) = x == e || y == e
+goesBothP :: Domino -> Board -> Bool
+goesBothP d b = goesLeftP d (head b) && goesRightP d (last b) 
 -- | TODO
 goesEndsP :: Domino -> Board -> Bool
 goesEndsP _ [] = True
-goesEndsP d b = let left = goesLeftP d (head b) 
-                    right = goesRightP d (last b) 
-                in (left || right)
+goesEndsP d b = goesLeftP d (head b) || goesRightP d (last b) 
 -- | The goesP function determines whether or not a domino can be played at a 
 -- given end of the board.
 -- It takes a Domino (int pair) and a Board (list of Dominoes) 
@@ -39,7 +43,8 @@ goesP d e b
   | otherwise = False
 -- | The turnDomino function rotates a domino based on which end of the board
 -- it is being played at.
--- It takes a Domino (int pair) and an End (as Domino) as parameters, and returns a Domino.
+-- It takes a Domino (int pair) and an End (as Domino) as parameters, and
+-- returns a Domino.
 turnDomino :: Domino -> End -> Board -> Domino
 turnDomino d e [] = d
 turnDomino d e b  
@@ -70,6 +75,7 @@ playDom d b e
 -- Domino) as parameters, and returns a Maybe Board if a valid move is made.
 score :: Int -> Int -> Int
 score x y
+  | mod (x + y) 15 == 0 = (quot (x + y) 5) + (quot (x + y) 3)
   | mod (x + y) 3 == 0 = quot (x + y) 3
   | mod (x + y) 5 == 0 = quot (x + y) 5
   | otherwise = 0
@@ -85,33 +91,38 @@ scoreDom d b e
 -- outer values.
 -- It takes a Domino (int pair), a Board (list of Dominoes), and an End (as 
 -- Domino) as parameters, and returns an integer.
+scoreDouble :: Domino -> Int
+scoreDouble (x,y) = x+y
 scoreBoard :: Board -> Int
 scoreBoard [] = 0
-scoreBoard b = score (fst (head b)) (snd (last b))
+scoreBoard (b:bs)
+  | (swap b) == b  && (swap (last bs)) == (last bs) = score (scoreDouble b) (scoreDouble (last bs))
+  | (swap b) == b = score (scoreDouble b) (snd (last bs))
+  | (swap (last bs)) == (last bs) = score (scoreDouble (last bs)) (fst b)
+  | otherwise = score (fst b) (snd (last bs))
 -- | The possPlays function lists all possible plays from a given hand, grouped
 -- by which end of the board they can be played at in a tuple of lists. Note
 -- that it takes an empty tuple of lists as the initial argument.
 -- It takes a Board (list of Dominoes), and returns an integer.
 possPlays :: Hand -> Board -> ([Domino], [Domino]) -> ([Domino], [Domino])
 possPlays [] b p = p
-possPlays h b p 
-  | goesLeftP (head h) (head b) && goesRightP (head h) (last b) = possPlays (tail h) b (head h:fst p, head h:snd p)
-  | goesLeftP (head h) (head b) = possPlays (tail h) b (head h:fst p, snd p)
-  | goesRightP (head h) (last b) = possPlays (tail h) b (fst p, head h:snd p)
-  | otherwise = possPlays (tail h) b (fst p, snd p)
+possPlays (h:hs) (b:bs) (l,r) 
+  | goesBothP h (b:bs) = possPlays hs (b:bs) (h:l, h:r)
+  | goesLeftP h (b) = possPlays hs (b:bs) (h:l, r)
+  | goesRightP h (last bs) = possPlays hs (b:bs) (l, h:r)
+  | otherwise = possPlays hs (b:bs) (l, r)
 -- | The scoreN function returns all dominoes that are not yet on the board
 -- that, if played, would result in the given score.
 -- It takes a Board and an Int representative of the desired score.
 -- It returns a list of Dominoes on completion.
 scoreNP :: Domino -> Board -> Int -> Bool
-scoreNP d [] s = ((fst d)<=(snd d)) && ((score (fst d) (snd d)) == s)
-scoreNP d b s = let notPlayed = not(playedP d b)
-                    scoreHead = scoreDom d b (head b) == s
-                    scoreTail = scoreDom d b (last b) == s
-                    scoreCorrect = scoreHead || scoreTail
-                    notDuplicate = (fst d)<=(snd d)
-                    goes = goesEndsP d b
-                 in (notPlayed && scoreCorrect && notDuplicate && goes)
+scoreNP (x,y) [] s = defaultPositionP (x,y) && score x y == s
+scoreNP d (b:bs) s = let notPlayed = not(playedP d (b:bs))
+                         scoreHead = scoreDom d (b:bs) b == s
+                         scoreTail = scoreDom d (b:bs) (last bs) == s
+                         scoreCorrect = scoreHead || scoreTail
+                         goes = goesEndsP d (b:bs)
+                     in (notPlayed && scoreCorrect && goes)
 scoreN :: Board -> Int -> [Domino]
-scoreN [] s = [(x,y) | x <- [0..6], y<- [0..6], x<=y && score x y == s]
-scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], scoreNP (x,y) b s]
+scoreN [] s = [(x,y) | x <- [0..6], y<- [0..6], score x y == s && defaultPositionP (x,y)]
+scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], scoreNP (x,y) b s && defaultPositionP (x,y)]
