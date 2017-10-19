@@ -51,6 +51,7 @@ goesP d e b
 turnDomino :: Domino -> End -> Board -> Domino
 turnDomino d e [] = d
 turnDomino d e b  
+  | not (isEndP e b) = d
   | not (goesEndsP d b) = d
   | goesLeftP d e && snd d == fst e = d
   | goesRightP d e && fst d == snd e = d
@@ -100,6 +101,7 @@ scoreDouble :: Domino -> Int
 scoreDouble (x,y) = x+y
 scoreBoard :: Board -> Int
 scoreBoard [] = 0
+scoreBoard ((x,y):[]) = score x y
 scoreBoard (b:bs)
   | (swap b) == b  && (swap (last bs)) == (last bs) = score (scoreDouble b) (scoreDouble (last bs))
   | (swap b) == b = score (scoreDouble b) (snd (last bs))
@@ -110,6 +112,7 @@ scoreBoard (b:bs)
 -- that it takes an empty tuple of lists as the initial argument.
 -- It takes a Board (list of Dominoes), and returns an integer.
 possPlays :: Hand -> Board -> ([Domino], [Domino]) -> ([Domino], [Domino])
+possPlays h [] p = (h,h)
 possPlays [] b p = p
 possPlays (h:hs) (b:bs) (l,r) 
   | goesBothP h (b:bs) = possPlays hs (b:bs) (h:l, h:r)
@@ -122,12 +125,12 @@ possPlays (h:hs) (b:bs) (l,r)
 -- It returns a list of Dominoes on completion.
 scoreNP :: Domino -> Board -> Int -> Bool
 scoreNP (x,y) [] s = defaultPositionP (x,y) && score x y == s
-scoreNP d (b:bs) s = let notPlayed = not(playedP d (b:bs))
-                         scoreHead = scoreDom d (b:bs) b == s
-                         scoreTail = scoreDom d (b:bs) (last bs) == s
-                         scoreCorrect = scoreHead || scoreTail
-                         goes = goesEndsP d (b:bs)
-                     in (notPlayed && scoreCorrect && goes)
+scoreNP d b s = let notPlayed = not(playedP d b)
+                    scoreHead = scoreDom d b (head b) == s
+                    scoreTail = scoreDom d b (last b) == s
+                    scoreCorrect = scoreHead || scoreTail
+                    goes = goesEndsP d b
+                in (notPlayed && scoreCorrect && goes)
 scoreN :: Board -> Int -> [Domino]
 scoreN [] s = [(x,y) | x <- [0..6], y<- [0..6], score x y == s && defaultPositionP (x,y)]
 scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], scoreNP (x,y) b s && defaultPositionP (x,y)]

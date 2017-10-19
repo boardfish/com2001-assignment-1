@@ -122,10 +122,6 @@ The original domino is returned in any case.
 
 #### End provided that isn't on the board
 
-Validation for whether or not an end exists is built into other methods at this point.
-
-TODO: Change that?
-
 ```
 *Main> turnDomino (0,1) (7,7) [(1,2),(2,0)]
 (1,0)
@@ -324,24 +320,31 @@ Just [(1,2),(2,0),(0,3),(0,1)]
 
 ### Tests
 
-#### Board has one or more dominoes
-
-TODO: Fix this!
-
-```
-*Main> scoreBoard [(0,3)]
-*** Exception: Prelude.last: empty list
-*Main> scoreBoard [(0,3),(3,5)]
-1
-*Main> scoreBoard [(0,3),(3,3)]
-1
-```
-
 #### Board is empty
 
 ```
 *Main> scoreBoard []
 0
+```
+
+#### Board has one domino
+
+```
+*Main> scoreBoard [(0,3)]
+1
+```
+
+#### Board has multiple dominoes
+```
+*Main> scoreBoard [(0,3),(3,5)]
+1
+```
+
+#### One end is a double
+
+```
+*Main> scoreBoard [(0,3),(3,3)]
+2
 ```
 
 ## possPlays
@@ -380,8 +383,6 @@ TODO: Fix this!
 
 #### Board has no dominoes
 
-TODO: Fix this! 
-
 ```
 *Main> possPlays [(1,0),(2,3)] [] ([],[])
 *** Exception: src/domino.hs:(109,1)-(114,42): Non-exhaustive pattern
@@ -418,17 +419,15 @@ Predicate function is `scoreNP`, hence if that is correct then so is scoreN.
 
 #### Board has one or more dominoes
 
-TODO: Fix this!
-
 ```
 *Main> scoreN [(1,2)] 0
-[(0,1),(0,2),(1,1)*** Exception: Prelude.last: empty list
+[(0,1),(0,2),(1,1),(1,5),(1,6),(2,3),(2,6)]
 *Main> scoreN [(1,2)] 1
-*** Exception: Prelude.last: empty list
+[(1,3),(2,2),(2,4)]
 *Main> scoreN [(1,2)] 2
-*** Exception: Prelude.last: empty list
+[(1,4),(2,5)]
 *Main> scoreN [(1,2)] 3
-*** Exception: Prelude.last: empty list
+[]
 *Main> scoreN [(1,2)] 4
-*** Exception: Prelude.last: empty list
+[]
 ```
