@@ -315,8 +315,6 @@ Nothing
 
 #### End isn't actually an end
 
-TODO: Fix this!
-
 ```
 *Main> playDom (1,0) [(1,2),(2,0),(0,3)] (2,0)
 Just [(1,2),(2,0),(0,3),(0,1)]

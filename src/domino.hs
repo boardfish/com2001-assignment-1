@@ -13,6 +13,9 @@ swap (x,y) = (y,x)
 -- It takes a Domino (int pair) as a parameter, and returns the same type.
 defaultPositionP :: Domino -> Bool
 defaultPositionP (x,y) = x<=y
+isEndP :: End -> Board -> Bool
+isEndP e [] = True
+isEndP e b = e == last b || e == head b
 playedP :: Domino -> Board -> Bool
 playedP d b = elem d b || elem (swap d) b
 -- | The goesLeftP function determines whether a domino can be played in either
@@ -67,6 +70,7 @@ knockingP h b
 playDom :: Domino -> Board -> End -> Maybe Board
 playDom d [] _ = Just [d]
 playDom d b e 
+  | not (isEndP e b) = Nothing
   | goesLeftP d e = Just ((turnDomino d e b) : b)
   | goesRightP d e = Just (b ++ [(turnDomino d e b)])    
   | otherwise = Nothing
