@@ -33,7 +33,12 @@
 
 #### Mutual multiple
 
-The greatest sum possible would be 12 ( a 6 on either end of the board). This means that there are no circumstances under which this would be the case, as the lowest common multiple of the two is 15. However, were this possible, the `score` function would have division by 5 take precedence, as this is tested first.
+Fives-and-threes rules state that if a score is a multiple of both three and five (that is, a multiple of 15), both are taken into account in the final sum. In an example given in the provided documentation, 15 scores 8 as it is both 3 \* **5** and 5 \* **3**.
+
+```
+*Main> score 15 0
+8
+```
 
 #### Multiple of neither
 
@@ -54,13 +59,32 @@ This function returns the score given after a certain domino has been played, pr
 
 ### Tests
 
+#### Board is empty
+
 ```
 *Main> scoreDom (0,3) [] (0,0)
 1
+```
+
+#### Domino isn't playable
+
+```
 *Main> scoreDom (7,7) [(0,0),(0,3)] (0,3)
 0
+```
+
+#### Play results in a score
+
+```
 *Main> scoreDom (3,5) [(0,0),(0,3)] (0,3)
 1
+```
+
+#### Play does not result in a score
+
+```
+*Main> scoreDom (3,2) [(0,0),(0,3)] (0,3)
+0
 ```
 
 ## turnDomino
@@ -289,15 +313,26 @@ Just [(1,0)]
 Nothing
 ```
 
+#### End isn't actually an end
+
+TODO: Fix this!
+
+```
+*Main> playDom (1,0) [(1,2),(2,0),(0,3)] (2,0)
+Just [(1,2),(2,0),(0,3),(0,1)]
+```
+
 ## scoreBoard
 
 ### Tests
 
 #### Board has one or more dominoes
 
+TODO: Fix this!
+
 ```
 *Main> scoreBoard [(0,3)]
-1
+*** Exception: Prelude.last: empty list
 *Main> scoreBoard [(0,3),(3,5)]
 1
 *Main> scoreBoard [(0,3),(3,3)]
@@ -347,9 +382,12 @@ Nothing
 
 #### Board has no dominoes
 
+TODO: Fix this! 
+
 ```
 *Main> possPlays [(1,0),(2,3)] [] ([],[])
-([(2,3),(1,0)],[(2,3),(1,0)])
+*** Exception: src/domino.hs:(109,1)-(114,42): Non-exhaustive pattern
+s in function possPlays
 ```
 
 #### Neither hand nor board has dominoes
@@ -382,15 +420,17 @@ Predicate function is `scoreNP`, hence if that is correct then so is scoreN.
 
 #### Board has one or more dominoes
 
+TODO: Fix this!
+
 ```
 *Main> scoreN [(1,2)] 0
-[(0,1),(0,2),(1,5),(1,6),(2,3),(2,6)]
+[(0,1),(0,2),(1,1)*** Exception: Prelude.last: empty list
 *Main> scoreN [(1,2)] 1
-[(1,1),(1,3),(2,2),(2,4)]
+*** Exception: Prelude.last: empty list
 *Main> scoreN [(1,2)] 2
-[(1,4),(2,5)]
+*** Exception: Prelude.last: empty list
 *Main> scoreN [(1,2)] 3
-[]
+*** Exception: Prelude.last: empty list
 *Main> scoreN [(1,2)] 4
-[]
+*** Exception: Prelude.last: empty list
 ```

@@ -84,6 +84,7 @@ score x y
 -- there, 0 is returned.
 -- It takes two integer arguments and returns one integer.
 scoreDom :: Domino -> Board -> End -> Int
+scoreDom (x,y) [] _ = score x y
 scoreDom d b e
   | isJust (playDom d b e) = scoreBoard (fromJust (playDom d b e))
   | otherwise = 0
