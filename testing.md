@@ -85,36 +85,63 @@ This function returns the score given after a certain domino has been played, pr
 #### Board is empty
 
 ```
-*Main> scoreDom (0,3) [] (0,0)
+*Main> scoreDom (0,3) L []
 1
 ```
 
 #### Domino isn't playable
 
 ```
-*Main> scoreDom (7,7) [(0,0),(0,3)] (0,3)
-0
-```
-
-#### End is not on the board
-
-```
-*Main> scoreDom (7,7) [(0,0),(0,3)] (1,2)
+*Main> scoreDom (7,7) L [(0,0),(0,3)] 
 0
 ```
 
 #### Play results in a score
 
 ```
-*Main> scoreDom (3,5) [(0,0),(0,3)] (0,3)
+*Main> scoreDom (3,5) R [(0,0),(0,3)] 
 1
 ```
 
 #### Play does not result in a score
 
 ```
-*Main> scoreDom (3,2) [(0,0),(0,3)] (0,3)
+*Main> scoreDom (3,2) R [(0,0),(0,3)]
 0
+```
+
+## scoreEnds
+
+This function returns the score generated from two given dominos as though they were the two ends of a board. This counts double dominoes. If scoring were to be based on the outer spots of the ends alone, this would be taken with the `score` function, but additional logic is necessary in the event of a double domino.
+
+### Tests
+
+#### Dominoes do not generate a score
+
+```
+*Main> scoreEnds (0,3) (3,2)
+0
+```
+#### Dominoes generate a score
+
+```
+*Main> scoreEnds (0,1) (1,3)
+1
+```
+#### Either domino is a double
+
+```
+*Main> scoreEnds (0,3) (3,3)
+2
+*Main> scoreEnds (3,3) (3,0)
+2
+```
+
+#### Both dominoes are doubles
+
+```
+*Main> scoreEnds (6,6) (3,3)
+6
 ```
 
 ## turnDomino
@@ -126,18 +153,18 @@ This function returns either a given domino or its swapped configuration, based 
 #### End provided for which the domino should be flipped
 
 ```
-*Main> turnDomino (1,0) (1,2) [(1,2),(2,0)]
+*Main> turnDomino (1,0) L [(1,2),(2,0)]
 (0,1)
-*Main> turnDomino (1,0) (2,0) [(1,2),(2,0)]
+*Main> turnDomino (1,0) R [(1,2),(2,0)]
 (0,1)
 ```
 
 #### End provided for which the domino should not flip
 
 ```
-*Main> turnDomino (0,1) (1,2) [(1,2),(2,0)]
+*Main> turnDomino (0,1) L [(1,2),(2,0)]
 (0,1)
-*Main> turnDomino (0,1) (2,0) [(1,2),(2,0)]
+*Main> turnDomino (0,1) R [(1,2),(2,0)]
 (0,1)
 ```
 
@@ -146,15 +173,10 @@ This function returns either a given domino or its swapped configuration, based 
 The original domino is returned in any case.
 
 ```
-*Main> turnDomino (0,1) (0,0) []
+*Main> turnDomino (0,1) L []
 (0,1)
-```
-
-#### End provided that isn't on the board
-
-```
-*Main> turnDomino (0,1) (7,7) [(1,2),(2,0)]
-(1,0)
+*Main> turnDomino (0,1) R []
+(0,1)
 ```
 
 ## scoreNP
@@ -195,6 +217,8 @@ False
 
 ```
 *Main> scoreNP (2,3) [] 1
+True
+*Main> scoreNP (3,3) [] 1
 True
 ```
 
@@ -243,30 +267,30 @@ This method checks whether or not a domino is playable at a given end. It uses t
 #### Domino is playable at the given end
 
 ```
-*Main> goesP (1,0) (0,0) [(0,0),(0,3)]
+*Main> goesP (1,0) L [(0,0),(0,3)]
 True
 ```
 
 #### Domino is playable at the given end in its flipped position
 
 ```
-*Main> goesP (1,0) (2,0) [(3,2),(2,0)]
+*Main> goesP (1,0) R [(3,2),(2,0)]
 True
 ```
 
 #### Domino is not playable at the given end
 
 ```
-*Main> goesP (1,0) (2,5) [(3,2),(2,5)]
+*Main> goesP (1,0) R [(3,2),(2,5)]
 False
 ```
 
 #### Board is empty
 
-A valid End is still required as an argument.
+An End is still required as an argument, but it does not affect the outcome.
 
 ```
-*Main> goesP (1,0) (2,5) []
+*Main> goesP (1,0) L []
 True
 ```
 
@@ -297,7 +321,7 @@ True
 False
 ```
 
-#### Board is empty
+#### Board is empty, and hand is not
 
 ```
 *Main> knockingP [(0,1)] []
@@ -313,21 +337,25 @@ This method returns the Board created when a given Domino is played, but will re
 #### Domino is playable
 
 ```
-*Main> playDom (2,5) [(3,2)] (3,2)
+*Main> playDom (2,3) L [(3,2)]
+Just [(2,3),(3,2)]
+*Main> playDom (2,5) R [(3,2)] 
 Just [(3,2),(2,5)]
 ```
 
 #### Domino is playable in its flipped position
 
 ```
-*Main> playDom (2,5) [(3,5)] (3,5)
+*Main> playDom (2,5) R [(3,5)]
 Just [(3,5),(5,2)]
 ```
 
 #### Domino is not playable
 
 ```
-*Main> playDom (2,5) [(3,4)] (3,4)
+*Main> playDom (2,5) L [(3,4)] 
+Nothing
+*Main> playDom (2,5) R [(3,4)] 
 Nothing
 ```
 
@@ -336,22 +364,10 @@ Nothing
 An End must still be provided.
 
 ```
-*Main> playDom (1,0) [] (0,0)
+*Main> playDom (1,0) L [] 
 Just [(1,0)]
-```
-
-#### End is not on the board
-
-```
-*Main> playDom (2,5) [(3,4)] (7,7)
-Nothing
-```
-
-#### End isn't actually an end
-
-```
-*Main> playDom (1,0) [(1,2),(2,0),(0,3)] (2,0)
-Just [(1,2),(2,0),(0,3),(0,1)]
+*Main> playDom (1,0) R [] 
+Just [(1,0)]
 ```
 
 ## scoreBoard
@@ -409,6 +425,8 @@ This method determines all possible plays that a player can make with their Hand
 ([(0,1)],[])
 *Main> possPlays [(0,1),(2,5)] [(1,3),(3,2)] ([],[])
 ([(0,1)],[(2,5)])
+*Main> possPlays [(0,1),(2,5)] [(6,3),(3,2)] ([],[])
+([],[(2,5)])
 ```
 
 #### Hand has a domino playable at either end
@@ -436,8 +454,7 @@ This method determines all possible plays that a player can make with their Hand
 
 ```
 *Main> possPlays [(1,0),(2,3)] [] ([],[])
-*** Exception: src/domino.hs:(109,1)-(114,42): Non-exhaustive pattern
-s in function possPlays
+([(1,0),(2,3)],[(1,0),(2,3)])
 ```
 
 #### Neither hand nor board has dominoes
@@ -469,6 +486,13 @@ This method relies primarily on the predicate function `scoreNP`.
 ```
 
 #### Board has one or more dominoes
+
+```
+*Main> scoreNP (2,2) [(1,2)] 1
+True
+*Main> scoreNP (2,2) [(1,2)] 0
+True
+```
 
 ```
 *Main> scoreN [(1,2)] 0

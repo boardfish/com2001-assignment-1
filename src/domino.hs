@@ -31,6 +31,8 @@ goesP (x,y) e b
   | e == L = y == fst(getEnd e b)
   | e == R = x == snd(getEnd e b)
   | otherwise = False
+goesSwappedP :: Domino -> End -> Board -> Bool
+goesSwappedP d e b = goesP d e b || goesP (swap d) e b
 -- | The turnDomino function rotates a domino based on which end of the board
 -- it is being played at.
 -- It takes a Domino (int pair) and an EndDom (as Domino) as parameters, and
@@ -57,7 +59,7 @@ knockingP h b
 playDom :: Domino -> End -> Board -> Maybe Board
 playDom d _ [] = Just [d]
 playDom d e b
-  | not (goesP d e b) = Nothing
+  | not ((goesP d e b) || (goesP (swap d) e b)) = Nothing
   | e == L = Just ((turnDomino d e b) : b)
   | e == R = Just (b ++ [(turnDomino d e b)])    
   | otherwise = Nothing
@@ -88,6 +90,7 @@ scoreEnds (a,b) (x,y)
   | a == b && x == y = score (x+y) (a+b)
   | a == b = score (a+b) y
   | x == y = score (x+y) a
+  | otherwise = score a y
 scoreBoard :: Board -> Int
 scoreBoard [] = 0
 scoreBoard ((x,y):[]) = score x y
@@ -108,14 +111,15 @@ possPlays (h:hs) (b:bs) (l,r)
 -- that, if played, would result in the given score.
 -- It takes a Board and an Int representative of the desired score.
 -- It returns a list of Dominoes on completion.
+-- It uses the scoreNP function to save on verbosity.
+-- NOTE: This is the only function to use the goesSwapped helper method as extra verification that a domino can go, as scoreDom returns 0 for invalid moves. I thought it would be less verbose to employ that just once, rather than make scoreDom a Maybe for all its uses.
 scoreNP :: Domino -> Board -> Int -> Bool
 scoreNP (x,y) [] s = defaultPositionP (x,y) && score x y == s
-scoreNP d b s = let notPlayed = not(playedP d b)
-                    scoreHead = scoreDom d L b  == s
-                    scoreTail = scoreDom d R b  == s
+scoreNP d b s = let notPlayed    = not(playedP d b)
+                    scoreHead    = scoreDom d L b == s && goesSwappedP d L b
+                    scoreTail    = scoreDom d R b == s && goesSwappedP d R b
                     scoreCorrect = scoreHead || scoreTail
-                    goes = goesP d L b || goesP d R b
-                in (notPlayed && scoreCorrect && goes)
+                in (notPlayed && scoreCorrect)
 scoreN :: Board -> Int -> [Domino]
 scoreN [] s = [(x,y) | x <- [0..6], y<- [0..6], score x y == s && defaultPositionP (x,y)]
 scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], scoreNP (x,y) b s && defaultPositionP (x,y)]
