@@ -30,57 +30,6 @@ False
 True
 ```
 
-## isEndP
-
-This method determines whether the given end is valid by determining which side of the board it is on, if any at all. The use of head and last here protects against pattern matching issues, as a list with one entry is both the head and the last of the list. This is something I use on necessary occasions.
-
-### Tests
-
-#### End is head
-
-```
-*Main> isEndP (1,0) [(1,0),(0,0),(0,3)]
-True
-```
-
-#### End is last
-
-```
-*Main> isEndP (0,3) [(1,0),(0,0),(0,3)]
-True
-```
-
-#### End is not on the board
-
-```
-*Main> isEndP (6,6) [(1,0),(0,0),(0,3)]
-False
-```
-
-#### End is not an end
-
-```
-*Main> isEndP (0,0) [(1,0),(0,0),(0,3)]
-False
-```
-
-## goesLeftP, goesRightP
-
-These methods compare a Domino with one side of a given End, left and right respectively.
-
-### Sample output
-
-```
-*Main> goesLeftP (0,1) (1,2)
-True
-*Main> goesLeftP (0,1) (2,1)
-False
-*Main> goesRightP (0,1) (2,1)
-True
-*Main> goesRightP (0,1) (2,2)
-False
-```
-
 ## score
 
 This method, given two integers, determines the score they would give according to fives-and-threes rules.
