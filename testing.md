@@ -1,15 +1,89 @@
+# Foreword
+
+This assignment revolved around replicating the mechanics of the game Dominoes, particularly in relation to the fives-and-threes ruleset. Naturally, the base game is very extensible, and many of the functions I have devised can be easily retooled for use in other rulesets, but many of the methods here are specific to fives-and-threes. Here, I have tested a variety of cases at length - all sample console output is taken from GHCI with the domino.hs module loaded. 
+
 # Helper Methods
 
 ## swap
 
-### Tests
+This method didn't load when I specified Domino was a pair, and should function exactly as the original did, simply by swapping the two integers in the pair.
+
+### Sample output
 
 ```
 *Main> swap (1,2)
 (2,1)
 ```
 
+## defaultPositionP
+
+This method determines whether or not the domino is in what one would assume to be its default position - with the greater number on the left. It is used in scoreN to filter out any duplicate entries that arise when a domino is not in its default position.
+
+### Sample output
+
+```
+*Main> defaultPositionP (2,3)
+True
+*Main> defaultPositionP (3,2)
+False
+*Main> defaultPositionP (3,3)
+True
+```
+
+## isEndP
+
+This method determines whether the given end is valid by determining which side of the board it is on, if any at all. The use of head and last here protects against pattern matching issues, as a list with one entry is both the head and the last of the list. This is something I use on necessary occasions.
+
+### Tests
+
+#### End is head
+
+```
+*Main> isEndP (1,0) [(1,0),(0,0),(0,3)]
+True
+```
+
+#### End is last
+
+```
+*Main> isEndP (0,3) [(1,0),(0,0),(0,3)]
+True
+```
+
+#### End is not on the board
+
+```
+*Main> isEndP (6,6) [(1,0),(0,0),(0,3)]
+False
+```
+
+#### End is not an end
+
+```
+*Main> isEndP (0,0) [(1,0),(0,0),(0,3)]
+False
+```
+
+## goesLeftP, goesRightP
+
+These methods compare a Domino with one side of a given End, left and right respectively.
+
+### Sample output
+
+```
+*Main> goesLeftP (0,1) (1,2)
+True
+*Main> goesLeftP (0,1) (2,1)
+False
+*Main> goesRightP (0,1) (2,1)
+True
+*Main> goesRightP (0,1) (2,2)
+False
+```
+
 ## score
+
+This method, given two integers, determines the score they would give according to fives-and-threes rules.
 
 ### Tests
 
@@ -55,7 +129,7 @@ Fives-and-threes rules state that if a score is a multiple of both three and fiv
 
 ## scoreDom
 
-This function returns the score given after a certain domino has been played, provided that is indeed possible. It is based on, and therefore its correctness is proven by, `playDom` and `scoreBoard` in combination.
+This function returns the score given after a certain domino has been played, provided that is indeed possible. It is based on, and therefore its correctness is proven by, `playDom` and `scoreBoard` in combination. It serves as a helper method, particularly for `scoreN`.
 
 ### Tests
 
@@ -70,6 +144,13 @@ This function returns the score given after a certain domino has been played, pr
 
 ```
 *Main> scoreDom (7,7) [(0,0),(0,3)] (0,3)
+0
+```
+
+#### End is not on the board
+
+```
+*Main> scoreDom (7,7) [(0,0),(0,3)] (1,2)
 0
 ```
 
@@ -89,7 +170,7 @@ This function returns the score given after a certain domino has been played, pr
 
 ## turnDomino
 
-This function returns either a given domino or its swapped configuration, based on the board and end provided.
+This function returns either a given domino or its swapped configuration, based on the board and end provided. Erroneous inputs will return the domino in its current configuration.
 
 ### Tests
 
@@ -129,7 +210,7 @@ The original domino is returned in any case.
 
 ## scoreNP
 
-This predicate returns whether or not playing a given domino would result in a given score. The logic is primarily inherited from the scoreDom helper function.
+This predicate returns whether or not playing a given domino would result in a given score. The logic is primarily inherited from the scoreDom helper function, and as a combined predicate, it is used mostly to make `scoreN` more concise.
 
 ### Tests
 
@@ -179,6 +260,8 @@ False
 
 ## playedP
 
+This method simply checks whether a domino is on the board in either possible configuration.
+
 ### Tests
 
 #### Domino is on the board
@@ -203,6 +286,8 @@ True
 ```
 
 ## goesP
+
+This method checks whether or not a domino is playable at a given end. It uses the two helper methods `goesLeftP` and  `goesRightP`, which compare the given Domino and End with pattern matching.
 
 ### Tests
 
@@ -238,6 +323,8 @@ True
 
 ## knockingP
 
+This method checks whether the player has at least one playable Domino in their hand, and returns `True` if this is not the case, signifying that they are knocking.
+
 ### Tests
 
 #### Hand is empty
@@ -269,6 +356,8 @@ False
 ```
 
 ## playDom
+
+This method returns the Board created when a given Domino is played, but will return Nothing if any part of the move is valid.
 
 ### Tests
 
@@ -318,6 +407,8 @@ Just [(1,2),(2,0),(0,3),(0,1)]
 
 ## scoreBoard
 
+This method figures out the score that a given Board is worth. This includes whether there is a double piece at either end.
+
 ### Tests
 
 #### Board is empty
@@ -345,9 +436,20 @@ Just [(1,2),(2,0),(0,3),(0,1)]
 ```
 *Main> scoreBoard [(0,3),(3,3)]
 2
+*Main> scoreBoard [(3,3),(3,0)]
+2
+```
+
+#### Both ends are doubles
+
+```
+*Main> scoreBoard [(3,3),(3,0),(0,2),(2,2)]
+2
 ```
 
 ## possPlays
+
+This method determines all possible plays that a player can make with their Hand on a given Board.
 
 ### Tests
 
@@ -398,7 +500,7 @@ s in function possPlays
 
 ## scoreN
 
-Predicate function is `scoreNP`, hence if that is correct then so is scoreN.
+This method relies primarily on the predicate function `scoreNP`.
 
 ### Tests
 

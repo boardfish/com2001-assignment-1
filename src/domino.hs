@@ -1,6 +1,6 @@
 import Data.Maybe
 type Domino = (Int, Int)
-type End = Domino
+type End    = Domino
 type Hand   = [Domino]
 type Board  = [Domino]
 -- | The swap function emulates rotating a domino by swapping the values in its 
@@ -39,7 +39,7 @@ goesEndsP d b = goesLeftP d (head b) || goesRightP d (last b)
 goesP :: Domino -> End -> Board -> Bool
 goesP d _ [] = True
 goesP d e b
-  | length b == 0 = True
+  | not (isEndP e b) = False
   | length b == 1 = goesEndsP d b
   | e == (head b) = goesLeftP d e
   | e == (last b) = goesRightP d e
