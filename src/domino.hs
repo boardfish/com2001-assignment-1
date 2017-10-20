@@ -4,39 +4,52 @@ data End    = L | R deriving (Enum, Eq, Show)
 type Hand   = [Domino]
 type Board  = [Domino]
 -- | The swap function emulates rotating a domino by swapping the values in its 
--- tuple.
--- It takes a Domino (int pair) as an argument, and returns the same type.
+-- pair.
+-- It takes a Domino (int pair) as an argument, and returns a Domino.
 swap :: Domino -> Domino
 swap (x,y) = (y,x)
+-- | The defaultPositionP function determines which orientation the given
+-- Domino is in by comparing the number of spots on either side. This is used
+-- to prevent duplicates in functions that require looping through all
+-- dominoes.
+defaultPositionP :: Domino -> Bool
+defaultPositionP (x,y) = x<=y
 -- | The playedP function determines whether a domino is on a given board in
 -- either possible rotation.
 -- It takes a Domino (int pair) as a parameter, and returns the same type.
-defaultPositionP :: Domino -> Bool
-defaultPositionP (x,y) = x<=y
 playedP :: Domino -> Board -> Bool
 playedP d b = elem d b || elem (swap d) b
--- | The goesP function determines whether or not a domino can be played at a 
--- given end of the board.
--- It takes a Domino (int pair) and a Board (list of Dominoes) 
--- as parameters, and returns a Boolean.
+-- | The getEnd helper function gets the domino at a given end of a given board.
 getEnd :: End -> Board -> Domino
+getEnd e [] = (9,9)
 getEnd e (b:[]) = b
 getEnd e (b:bs) 
   | e == L = b
   | e == R = last bs
+-- | The goesP function determines whether or not a given domino can
+-- be played at a given end of a given board. It takes a Domino (int
+-- pair), an End (L or R), and a Board (list of Dominoes) as
+-- parameters, and returns a Boolean.
 goesP :: Domino -> End -> Board -> Bool
 goesP d _ [] = True
-goesP (x,y) e b
+goesP (x,y) e (b:[])
   | x>6 || y>6 = False
-  | e == L = y == fst(getEnd e b)
-  | e == R = x == snd(getEnd e b)
+  | e == L = y == fst b
+  | e == R = x == snd b
   | otherwise = False
+goesP (x,y) e (b:bs)
+  | x>6 || y>6 = False
+  | e == L = y == fst b
+  | e == R = x == snd(last bs)
+  | otherwise = False
+  -- | The goesSwappedP helper function checks that a Domino can be
+  -- played in either of its positions, rather than just the one
+  -- that was supplied. It's used as a helper function in places. It takes the same inputs and outputs as goesP.
 goesSwappedP :: Domino -> End -> Board -> Bool
 goesSwappedP d e b = goesP d e b || goesP (swap d) e b
--- | The turnDomino function rotates a domino based on which end of the board
--- it is being played at.
--- It takes a Domino (int pair) and an EndDom (as Domino) as parameters, and
--- returns a Domino.
+-- | The turnDomino function rotates a domino based on which end of
+-- the board it is being played at. It takes a Domino (int pair) and
+-- an End (L/R) as parameters, and returns a Domino.
 turnDomino :: Domino -> End -> Board -> Domino
 turnDomino d e [] = d
 turnDomino d e b  
@@ -81,16 +94,17 @@ scoreDom (x,y) _ [] = score x y
 scoreDom d e b
   | isJust (playDom d e b) = scoreBoard (fromJust (playDom d e b))
   | otherwise = 0
--- | The scoreBoard function scores a given board using the outer dominoes'
--- outer values.
--- It takes a Domino (int pair), a Board (list of Dominoes), and an EndDom (as 
--- Domino) as parameters, and returns an integer.
+-- | The scoreEnds function scores a given pair of dominoes based on
+-- the fives-and-threes rule under the assumption that they are two
+-- ends of some imaginary board, and returns an integer.
 scoreEnds :: Domino -> Domino -> Int
 scoreEnds (a,b) (x,y)
   | a == b && x == y = score (x+y) (a+b)
   | a == b = score (a+b) y
   | x == y = score (x+y) a
   | otherwise = score a y
+-- | The scoreBoard function scores a given board based on the fives-and-threes rule, and returns
+-- an integer.
 scoreBoard :: Board -> Int
 scoreBoard [] = 0
 scoreBoard ((x,y):[]) = score x y
@@ -120,6 +134,8 @@ scoreNP d b s = let notPlayed    = not(playedP d b)
                     scoreTail    = scoreDom d R b == s && goesSwappedP d R b
                     scoreCorrect = scoreHead || scoreTail
                 in (notPlayed && scoreCorrect)
+-- | Please see the documentation for scoreNP, as these two functions should be considered collectively.
+-- NOTE: defaultPositionP is not in the original scoreN predicate, since scoreNP should take any domino, in theory. defaultPositionP can be considered a filter for the query that is scoreNP.
 scoreN :: Board -> Int -> [Domino]
 scoreN [] s = [(x,y) | x <- [0..6], y<- [0..6], score x y == s && defaultPositionP (x,y)]
 scoreN b s = [(x,y) | x <- [0..6], y<- [0..6], scoreNP (x,y) b s && defaultPositionP (x,y)]

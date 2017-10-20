@@ -215,10 +215,12 @@ False
 
 #### Domino would be first in play and result in a score
 
+TODO: OH SHIT
+
 ```
 *Main> scoreNP (2,3) [] 1
 True
-*Main> scoreNP (3,3) [] 1
+*Main> scoreNP (3,3) [] 2
 True
 ```
 
@@ -275,8 +277,10 @@ True
 
 ```
 *Main> goesP (1,0) R [(3,2),(2,0)]
-True
+False
 ```
+
+This scenario is catered for by goesSwappedP.
 
 #### Domino is not playable at the given end
 
@@ -486,13 +490,6 @@ This method relies primarily on the predicate function `scoreNP`.
 ```
 
 #### Board has one or more dominoes
-
-```
-*Main> scoreNP (2,2) [(1,2)] 1
-True
-*Main> scoreNP (2,2) [(1,2)] 0
-True
-```
 
 ```
 *Main> scoreN [(1,2)] 0
