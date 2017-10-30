@@ -1,3 +1,4 @@
+module Dominoes where
 import Data.Maybe
 type Domino = (Int, Int)
 data End    = L | R deriving (Enum, Eq, Show)
