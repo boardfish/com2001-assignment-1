@@ -14,7 +14,7 @@ swap (x,y) = (y,x)
 -- to prevent duplicates in functions that require looping through all
 -- dominoes.
 defaultPositionP :: Domino -> Bool
-defaultPositionP (x,y) = x<=y
+defaultPositionP (x,y) = x>=y
 -- | The playedP function determines whether a domino is on a given board in
 -- either possible rotation.
 -- It takes a Domino (int pair) as a parameter, and returns the same type.
@@ -128,6 +128,13 @@ possPlays (h:hs) (b:bs) (l,r)
 -- It returns a list of Dominoes on completion.
 -- It uses the scoreNP function to save on verbosity.
 -- NOTE: This is the only function to use the goesSwapped helper method as extra verification that a domino can go, as scoreDom returns 0 for invalid moves. I thought it would be less verbose to employ that just once, rather than make scoreDom a Maybe for all its uses.
+scoreNP :: Domino -> Board -> Int -> Bool
+scoreNP (x,y) [] s = defaultPositionP (x,y) && score x y == s
+scoreNP d b s = let notPlayed    = not(playedP d b)
+                    scoreHead    = scoreDom d L b == s && goesSwappedP d L b
+                    scoreTail    = scoreDom d R b == s && goesSwappedP d R b
+                    scoreCorrect = scoreHead || scoreTail
+                in (notPlayed && scoreCorrect)
 scoreNP :: Domino -> Board -> Int -> Bool
 scoreNP (x,y) [] s = defaultPositionP (x,y) && score x y == s
 scoreNP d b s = let notPlayed    = not(playedP d b)
