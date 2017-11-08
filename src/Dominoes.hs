@@ -65,8 +65,8 @@ turnDomino d e b
 knockingP :: Hand -> Board -> Bool
 knockingP h b 
   | null h = True
-  | goesP (head h) L b = False
-  | goesP (head h) R b = False
+  | goesSwappedP (head h) L b = False
+  | goesSwappedP (head h) R b = False
   | otherwise = knockingP (tail h) b
 -- | The playDom function returns an updated board featuring a given domino, if 
 -- that domino can be played at a given end of the board.
@@ -128,13 +128,6 @@ possPlays (h:hs) (b:bs) (l,r)
 -- It returns a list of Dominoes on completion.
 -- It uses the scoreNP function to save on verbosity.
 -- NOTE: This is the only function to use the goesSwapped helper method as extra verification that a domino can go, as scoreDom returns 0 for invalid moves. I thought it would be less verbose to employ that just once, rather than make scoreDom a Maybe for all its uses.
-scoreNP :: Domino -> Board -> Int -> Bool
-scoreNP (x,y) [] s = defaultPositionP (x,y) && score x y == s
-scoreNP d b s = let notPlayed    = not(playedP d b)
-                    scoreHead    = scoreDom d L b == s && goesSwappedP d L b
-                    scoreTail    = scoreDom d R b == s && goesSwappedP d R b
-                    scoreCorrect = scoreHead || scoreTail
-                in (notPlayed && scoreCorrect)
 scoreNP :: Domino -> Board -> Int -> Bool
 scoreNP (x,y) [] s = defaultPositionP (x,y) && score x y == s
 scoreNP d b s = let notPlayed    = not(playedP d b)

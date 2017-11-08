@@ -5,17 +5,6 @@
 - Mapping function of dominoes to their scores
 - Sort highest to lowest, take head
 
-# playDomsRound (p1, p2, seed)
-
-1. Define hands
-    - Call dealDoms
-
-2. Play round
-    - Call each player with their hands
-    - Call playDom with the returned Hand and Board
-    - Add scoreN (board) to their score
-    - At the end of one turn, return the final score if knockingP for both
-
 # DONE
 
 # shuffleDoms
@@ -38,4 +27,15 @@
 ## simplePlayer
 
 - Use head of possPlays to select domino
+
+# playDomsRound (p1, p2, seed)
+
+1. Define hands
+    - Call dealDoms
+
+2. Play round
+    - Call each player with their hands
+    - Call playDom with the returned Hand and Board
+    - Add scoreN (board) to their score
+    - At the end of one turn, return the final score if knockingP for both
 
