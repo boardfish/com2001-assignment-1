@@ -19,11 +19,17 @@ simplePlayer (d:h) b
  | goesSwappedP d L b = (d, L)
  | goesSwappedP d R b = (d, R)
  | otherwise = simplePlayer h b
--- playDomsTurn :: DomsPlayer -> Board -> Int
--- playDomsTurn p b = 
---     let 
--- playDomsRound :: DomsPlayer -> DomsPlayer -> (Int, Int)
--- playDomsRound = 
+singleMove :: DomsPlayer -> Hand -> Board -> (Int, Board)
+singleMove p h b
+ | knockingP h = (0,b)
+ | otherwise = playDom (p h b)
+playRound :: (DomsPlayer, Int, Hand) -> (DomsPlayer, Int, Hand) -> Board -> (Int, Int)
+playRound (p1,p1s,p1h) (p2,p2s,p2h) b = p1 p1h b
+playDomsRound :: DomsPlayer -> DomsPlayer -> Int -> (Int, Int)
+playDomsRound p1 p2 seed = let dealtDominos = dealDoms 64
+                               board = []
+                               scores = playRound (p1,0,fst dealtDominos) (p2,0,dealtDominos) board
+                            in (scores)
 -- sortHandByScore :: Hand -> Hand
 -- sortHandByScore h = 
 --     let randomList = map score
