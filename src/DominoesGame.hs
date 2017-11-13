@@ -25,7 +25,7 @@ simplePlayer (d:h) b
  | goesSwappedP d R b = (d, R)
  | otherwise = simplePlayer h b
 hsdPlayer :: DomsPlayer
-hsdPlayer h b = let ((score,dom):shs) = sortHandByScore h b in (dom, L)
+hsdPlayer h b = let ((score,dom):shs) = sortHandByScore h L b in (dom, L)
 singleMove :: DomsPlayer -> Hand -> Board -> (Int, Board, Hand)
 singleMove p h b
   | knockingP h b = (0,b,h)
