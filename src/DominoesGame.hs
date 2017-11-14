@@ -46,10 +46,6 @@ fst3 (x, _, _) = x
 --   function in hsdPlayer outputs in the form (score, end, domino), so this
 --   function returns the standard output form of any DomsPlayer function with 
 --   that given input.
-convertHighestScoreResult :: (Int, End, (Int, Int)) -> (Domino, End)
-convertHighestScoreResult (s, e, d) = (d, e)
--- | The hsdPlayer function finds the highest-scoring domino in the provided
---   hand, and returns it with the end at which it is playable.
 hsdPlayer :: DomsPlayer
 hsdPlayer h b = let (ppl, ppr) = possPlays h b ([],[])
                     -- Relatively self-explanatory, but the mapping function
@@ -57,8 +53,8 @@ hsdPlayer h b = let (ppl, ppr) = possPlays h b ([],[])
                     -- and side at which it is playable for that score.
                     left = map (\(x,y) -> (scoreDom (x,y) L b, L, (x,y))) ppl
                     right = map (\(x,y) -> (scoreDom (x,y) R b, R, (x,y))) ppr
-                    dom = head (reverse (sortBy (comparing fst3) (left ++ right)))
-                 in (convertHighestScoreResult dom)
+                    (s,e,d) = head (reverse (sortBy (comparing fst3) (left ++ right)))
+                 in ((d,e))
 -- | The singleMove function emulates the result of a single move made by a
 --   DomsPlayer, returning the score given by their move, the resulting board,
 --   and their hand after making the move.
