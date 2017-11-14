@@ -4,6 +4,7 @@ import MergeSort
 import System.Random 
 import Data.Maybe
 import Data.List
+import Data.Ord (comparing)
 type DomsPlayer = Hand -> Board -> (Domino, End)
 deleteDom :: Domino -> Hand -> Hand
 deleteDom y [] = []
@@ -24,8 +25,16 @@ simplePlayer (d:h) b
  | goesSwappedP d L b = (d, L)
  | goesSwappedP d R b = (d, R)
  | otherwise = simplePlayer h b
+fst3 :: (a, b, c) -> a
+fst3 (x, _, _) = x
+convertHighestScoreResult :: (Int, End, (Int, Int)) -> (Domino, End)
+convertHighestScoreResult (s, e, d) = (d, e)
 hsdPlayer :: DomsPlayer
-hsdPlayer h b = let ((score,dom):shs) = sortHandByScore h L b in (dom, L)
+hsdPlayer h b = let (ppl, ppr) = possPlays h b ([],[])
+                    left = map (\(x,y) -> (scoreDom (x,y) L b, L, (x,y))) ppl
+                    right = map (\(x,y) -> (scoreDom (x,y) R b, R, (x,y))) ppr
+                    dom = head (reverse (sortBy (comparing fst3) (left ++ right)))
+                 in (convertHighestScoreResult dom)
 singleMove :: DomsPlayer -> Hand -> Board -> (Int, Board, Hand)
 singleMove p h b
   | knockingP h b = (0,b,h)
@@ -34,7 +43,8 @@ singleMove p h b
                     score = scoreBoard board
                     hand  = deleteDom d h
                  in ((score, board, hand))
-playRound :: (DomsPlayer, Int, Hand) -> (DomsPlayer, Int, Hand) -> Board -> ((Int, Int),Board)
+playRound :: (DomsPlayer, Int, Hand) -> (DomsPlayer, Int, Hand) 
+          -> Board -> ((Int, Int),Board)
 playRound (p1,p1s,p1h) (p2,p2s,p2h) b = 
     let (p1ns, t1b, p1nh) =  singleMove p1 p1h b
         (p2ns, t2b, p2nh) =  singleMove p2 p2h t1b
@@ -46,5 +56,3 @@ playDomsRound p1 p2 seed = let (p1h,p2h) = dealDoms seed
                                b = []
                                (scores, board) = playRound (p1,0,p1h) (p2,0,p2h) b
                             in (scores,board)
-sortHandByScore :: Hand -> End -> Board -> [(Int, (Int,Int))]
-sortHandByScore h e b = reverse (sort [(scoreDom (x,y) e b, (x,y)) | x <- [0..6], y<- [0..6], elem (x,y) h])

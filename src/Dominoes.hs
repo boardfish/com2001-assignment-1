@@ -118,9 +118,9 @@ possPlays :: Hand -> Board -> ([Domino], [Domino]) -> ([Domino], [Domino])
 possPlays h [] p = (h,h)
 possPlays [] b p = p
 possPlays (h:hs) (b:bs) (l,r) 
-  | goesP h L (b:bs) && goesP h R (b:bs) = possPlays hs (b:bs) (h:l, h:r)
-  | goesP h L (b:bs) = possPlays hs (b:bs) (h:l, r)
-  | goesP h R (b:bs) = possPlays hs (b:bs) (l, h:r)
+  | goesSwappedP h L (b:bs) && goesSwappedP h R (b:bs) = possPlays hs (b:bs) (h:l, h:r)
+  | goesSwappedP h L (b:bs) = possPlays hs (b:bs) (h:l, r)
+  | goesSwappedP h R (b:bs) = possPlays hs (b:bs) (l, h:r)
   | otherwise = possPlays hs (b:bs) (l, r)
 -- | The scoreN function returns all dominoes that are not yet on the board
 -- that, if played, would result in the given score.

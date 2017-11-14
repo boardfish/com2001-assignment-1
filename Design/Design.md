@@ -2,16 +2,14 @@
 
 ## hsdPlayer
 
-- Mapping function of dominoes to their scores
+- Mapping function of dominoes to their scores per side of the board using `scoreDom`
 - Sort highest to lowest, take head
-
-# DONE
 
 # shuffleDoms
 
 - Shuffle dominoes using a random seed
-    - Use generated random seed to create a list of numbers
-    - Map this to the **array of dominoes** and sort - need a helper function!
+    - Use generated random seed to create a random range to 28
+    - Map this to the **array of dominoes** and sort
 
 # Helper: genAllDominoes
 
