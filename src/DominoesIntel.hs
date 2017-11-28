@@ -10,8 +10,7 @@ module DominoesIntel where
     deleteAllInstances :: Eq a => a -> [a] -> [a]
     deleteAllInstances a xs = filter (/= a) xs
     countSpots :: Int -> [Int] -> [Int]
-    countSpots _ [] = []
-    countSpots 7 l = l
+    countSpots 7 l = []
     countSpots y l = count y l : countSpots (y+1) (deleteAllInstances y l)
     countHandSpots :: Hand -> [Int]
     countHandSpots h = countSpots 0 (handToSpots h)
