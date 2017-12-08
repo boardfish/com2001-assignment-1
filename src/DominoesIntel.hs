@@ -4,6 +4,10 @@ module DomsIntel where
     type Tactic = DomsPlayer
     swap :: Dom -> Dom
     swap (x,y) = (y,x)
+    otherPlayer :: Player -> Player
+    otherPlayer p
+      | p == P1 = P2
+      | p == P2= P1
     handToSpots :: Hand -> [Int]
     handToSpots [] = []
     handToSpots ((x,y):hs) = sort (x : y : handToSpots hs)
@@ -42,13 +46,15 @@ module DomsIntel where
       ( (ltDom,_,_) : (l2tDom,l2tP,l2tNum) : reverseHist) = reverse (his)
       playedLeft = ltDom == l || (swap ltDom) == l 
       hist = reverse (reverseHist)
-    -- checkKnocking :: [Int] -> Player -> DomBoard -> [Int]
-    -- checkKnocking _ _ InitBoard = []
-    -- checkKnocking acc p (Board l r ((d1,p1,_):[])) = []
-    -- checkKnocking acc p (Board l r ((d1,p1,_):(d2,p2,s):his))
-    --   | p1 != p2 = checkKnocking acc p ((d2,p2,s):his)
-    --   | p1 == p = checkKnocking acc p ((d2,p2,s):his)
-    --   | otherwise = checkKnocking acc p (Board l r ((d2,p2,s):his))
+    checkKnocking :: [Int] -> Player -> DomBoard -> [Int]
+    checkKnocking acc p InitBoard = acc
+    checkKnocking acc p (Board l r (turn:[])) = acc
+    checkKnocking acc p (Board l r hist)
+      | p1 /= p2 = checkKnocking acc p (stepBack (Board l r hist))
+      | p1 /= p = checkKnocking acc p (stepBack (Board l r hist))
+      | otherwise = checkKnocking (lastL : lastR : acc) p (stepBack (Board l r hist))
+     where (Board (lastL,_) (_,lastR) lastHist) = stepBack (Board l r hist)
+           ((lDom, p1, s1):(l2Dom, p2, s2):remHist) = reverse hist
     unplayedDoms :: Hand -> DomBoard -> Hand
     -- Assumes all doms in hand are highest no. first
     unplayedDoms h InitBoard = filter (\x -> not (elem x h)) domSet 
