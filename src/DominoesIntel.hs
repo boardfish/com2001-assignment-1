@@ -1,7 +1,9 @@
-module DominoesIntel where
+module DomsIntel where
     import DomsMatch
     import Data.List
     type Tactic = DomsPlayer
+    swap :: Dom -> Dom
+    swap (x,y) = (y,x)
     handToSpots :: Hand -> [Int]
     handToSpots [] = []
     handToSpots ((x,y):hs) = sort (x : y : handToSpots hs)
@@ -19,13 +21,54 @@ module DominoesIntel where
     -- of times this spot amount appears on dominoes in the hand.
     maxSpots :: Hand -> [(Int, Int)]
     maxSpots h = reverse (sortBy (comparing $ snd) (countHandSpots h))
-    -- unplayedDoms :: Hand -> DomBoard -> Hand
-    -- unplayedDoms h b = (domSet \\ b) \\ h
+    -- TODO
+    -- matchSpots :: Hand -> Int -> Hand
+    -- matchSpots h i = let ((mfs,mfs2):mfsl) = maxSpots h
+    --                      sortedHand = filter (\(x,y) -> x==mostFrequentSpots || y==mostFrequentSpots) h
+    --                      (d,e,_) = if length sortedHand == 0 matchSpots sortedHand b else hsd h b
+    --                   in (d, e)
+    -- The rebuildBoard function converts a DomBoard to a Hand with total disregard for order.
+    rebuildBoard :: DomBoard -> Hand
+    rebuildBoard InitBoard = []
+    rebuildBoard (Board _ _ []) = []
+    rebuildBoard (Board l r ((d,_,_):his)) = (d : rebuildBoard (Board l r his))
+    stepBack :: DomBoard -> DomBoard
+    stepBack InitBoard = InitBoard
+    stepBack (Board _ _ (his:[])) = InitBoard
+    stepBack (Board l r his)   
+     |playedLeft = (Board l2tDom r (hist ++ [(l2tDom,l2tP,l2tNum)]))
+     |otherwise = (Board l l2tDom (hist ++ [(l2tDom,l2tP,l2tNum)]))
+     where 
+      ( (ltDom,_,_) : (l2tDom,l2tP,l2tNum) : reverseHist) = reverse (his)
+      playedLeft = ltDom == l || (swap ltDom) == l 
+      hist = reverse (reverseHist)
+    -- checkKnocking :: [Int] -> Player -> DomBoard -> [Int]
+    -- checkKnocking _ _ InitBoard = []
+    -- checkKnocking acc p (Board l r ((d1,p1,_):[])) = []
+    -- checkKnocking acc p (Board l r ((d1,p1,_):(d2,p2,s):his))
+    --   | p1 != p2 = checkKnocking acc p ((d2,p2,s):his)
+    --   | p1 == p = checkKnocking acc p ((d2,p2,s):his)
+    --   | otherwise = checkKnocking acc p (Board l r ((d2,p2,s):his))
+    unplayedDoms :: Hand -> DomBoard -> Hand
+    -- Assumes all doms in hand are highest no. first
+    unplayedDoms h InitBoard = filter (\x -> not (elem x h)) domSet 
+    unplayedDoms h b = filter (\x -> not (elem x h || elem x board || elem (swap x) board)) domSet 
+        where 
+            board = rebuildBoard b
     firstMove :: Tactic
-    firstMove h db p s
+    firstMove h InitBoard p s
       | elem (5,4) h = ((5,4),L)
-      | otherwise = hsdPlayer h db p s -- TODO: Swap this for Clear Out
+      | otherwise = clearOut h InitBoard p s -- TODO: Swap this for Clear Out
+    firstMove h (Board l r hist) p s = clearOut h (Board l r hist) p s -- TODO: Swap this for Clear Out
     clearOut :: Tactic
-    clearOut h b p s = let ((mostFrequentSpots,_):_) = maxSpots h
-                           (d,e,_) = hsd (filter (\(x,y) -> x==mostFrequentSpots || y==mostFrequentSpots) h) b
-                         in (d, e)
+    clearOut h b p s
+      | not(null sortedHand) = let (d,e,_) = hsd sortedHand b in (d,e)
+      | otherwise = let (d,e,_) = hsd h b in (d,e)
+       where 
+        ((mfs,f):mfsl) = maxSpots h
+        sortedHand = filter (\(x,y) -> x==mfs || y==mfs) h
+
+
+    -- guessDomsInPlay :: Hand -> History -> Hand
+    -- guessDomsInPlay = filteredHand where
+    --     unplayed = unplayedDoms
