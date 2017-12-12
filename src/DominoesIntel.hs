@@ -52,31 +52,38 @@ module DomsIntel where
     rebuildBoard InitBoard = []
     rebuildBoard (Board _ _ []) = []
     rebuildBoard (Board l r ((d,_,_):his)) = (d : rebuildBoard (Board l r his))
+    -- | turnNumber isolates the turnNumber from an item of the board History.
     turnNumber :: (Dom,Player,Int) -> Int
     turnNumber (_,_,turn) = turn
+    -- | sortHistory sorts a given DomBoard's History by turn number.
     sortHistory :: DomBoard -> DomBoard
     sortHistory InitBoard = InitBoard
     sortHistory (Board l r his) = (Board l r (reverse (sortBy (comparing $ turnNumber) (his))))
+    -- | stepBack 
+    -- compare present L with head of history
+    -- if it is, then keep tail of history and replace L with head of tail
+    -- else reverse the history, replace R with head of tail, keep tail and reverse again
     stepBack :: DomBoard -> DomBoard
     stepBack InitBoard = InitBoard
     stepBack (Board _ _ (his:[])) = InitBoard
-    stepBack (Board l r his)   
-     |playedLeft = (Board l2tDom r (hist ++ [(l2tDom,l2tP,l2tNum)]))
-     |otherwise = (Board l l2tDom (hist ++ [(l2tDom,l2tP,l2tNum)]))
+    stepBack (Board l r hist)   
+     |playedLeft = (Board lastLeft r leftHist)
+     |otherwise = (Board l lastRight rightHist)
      where 
-         (Board l r sortedHistory) = sortHistory (Board l r his)
-         ( (ltDom,_,_) : (l2tDom,l2tP,l2tNum) : reverseHist) = sortedHistory
-         playedLeft = ltDom == l || (swap ltDom) == l 
-         hist = reverse (reverseHist)
+         playedLeft = turnNumber (head hist) > turnNumber (last hist)
+         leftHist = tail hist
+         (lastLeft,_,_) = head (leftHist)
+         rightHist = reverse (tail (reverse hist))
+         (lastRight,_,_) = last (rightHist)
     checkKnocking :: [Int] -> Player -> DomBoard -> [Int]
     checkKnocking acc p InitBoard = acc
     checkKnocking acc p (Board l r (turn:[])) = acc
-    checkKnocking acc p (Board l r hist)
-      | p1 /= p2 = checkKnocking acc p (stepBack (Board l r hist))
-      | p1 /= p = checkKnocking acc p (stepBack (Board l r hist))
-      | otherwise = checkKnocking (lastL : lastR : acc) p (stepBack (Board l r hist))
-     where (Board (lastL,_) (_,lastR) lastHist) = stepBack (Board l r hist)
-           ((lDom, p1, s1):(l2Dom, p2, s2):remHist) = reverse hist
+    checkKnocking acc p b
+      | p1 /= p2 = checkKnocking acc p (stepBack b)
+      | p1 /= p = checkKnocking acc p (stepBack b)
+      | otherwise = checkKnocking (lastL : lastR : acc) p (stepBack b)
+     where (Board (lastL,_) (_,lastR) _) = stepBack b
+           (Board _ _ ((lDom, p1, _):(l2Dom, p2, _):_)) = sortHistory b
     unplayedDoms :: Hand -> DomBoard -> Hand
     -- Assumes all doms in hand are highest no. first
     unplayedDoms h InitBoard = filter (\x -> not (elem x h)) domSet 
@@ -117,6 +124,9 @@ module DomsIntel where
     -- in on 61 from 53.
     intelligentPlayer :: DomsPlayer
     intelligentPlayer h b p s
+      | canWin h b p s = trace "FOR THE WIN" target53 h b p s
+      | canDenyAllMoves h b p = trace "DENY ALL MOVES" denyAllMoves h b p s
+      | canDenyMoves h b p = trace "DENY MOVES" denyMoves h b p s
       | ps > 53 = trace "TARGET 57" target53 h b p s
       | ps >= os = trace "CLEAR OUT" clearOut h b p s
       | otherwise = trace "HIGH SCORE" hsdPlayer h b p s
@@ -152,18 +162,46 @@ module DomsIntel where
               scoreRight = scoreDom d R b
               (ps,_) = getPlayerScore p s
               (d:ds) = scoreOrLess (61-ps) (61-ps) h b 
+    filterSpots :: Hand -> [Int] -> Hand
+    -- filter spots from hand
+    -- if there's anything left, pull denyMoves
+    filterSpots [] _ = []
+    filterSpots h [] = h
+    filterSpots h s = filter (\(x,y) -> not (elem x s || elem y s)) h
+    -- doms which go at all
+    drops :: Hand->DomBoard->Hand
+     
+    drops h b = filter (\d -> goesRP d b || goesLP d b) h 
+    canDenyMoves :: Hand -> DomBoard -> Player -> Bool
+    canDenyMoves h b p = 
+        let knocks = checkKnocking [] p b
+            possplays = drops (filterSpots h knocks) b
+         in not (null possplays)
+    canDenyAllMoves :: Hand -> DomBoard -> Player -> Bool
+    canDenyAllMoves h b p = 
+        let domsInPlay = handToSpots (guessDomsInPlay p h b)
+            possplays = drops (filterSpots h domsInPlay) b
+         in not (null possplays)
+    denyMoves :: Tactic
+    denyMoves h b p s = (d,e)
+        where (d,e,_) = hsd (filterSpots h knocks) b
+              knocks = checkKnocking [] p b
+    denyAllMoves :: Tactic
+    denyAllMoves h b p s = (d,e)
+        where (d,e,_) = hsd (filterSpots h domsInPlay) b
+              domsInPlay = handToSpots (guessDomsInPlay p h b)
     -- | guessDomsInPlay is a function that uses the board history to determine
     -- which dominoes are unplayed.
     guessDomsInPlay :: Player -> Hand -> DomBoard -> Hand
     guessDomsInPlay p h b = let unplayed = unplayedDoms h b
                                 knocking = checkKnocking [] p b
-                             in filter (\(x,y) -> not (elem x knocking || elem y knocking)) unplayed
+                             in filterSpots unplayed knocking
     -- | canWin determines whether a player can directly close the gap between 
     -- their current score and 61 in a single move.
     canWin :: Hand -> DomBoard -> Player -> Scores -> Bool
     canWin h b p s
       | ps < 53 = False
-      | otherwise = True --TODO
+      | otherwise = not (null (scoreExactly (61-ps) h b)) --TODO
       where (ps,_) = getPlayerScore p s
             scoreDifference = 61-ps
     -- | scoreDomSF is a secondary implementation of scoreDom that returns -1
