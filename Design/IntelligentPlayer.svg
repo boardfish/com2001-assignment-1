@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="444.95413mm"
+   height="456.13962mm"
+   viewBox="0 0 444.95413 456.13962"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="IntelligentPlayer.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.45254834"
+     inkscape:cx="828.71317"
+     inkscape:cy="850.79678"
+     inkscape:document-units="mm"
+     inkscape:current-layer="g932-5"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(36.292269,-100.06014)">
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot817"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"><flowRegion
+         id="flowRegion819"
+         style="fill:#ffffff"><rect
+           id="rect821"
+           width="888.57141"
+           height="411.42856"
+           x="-60"
+           y="291.09113"
+           style="fill:#ffffff" /></flowRegion><flowPara
+         id="flowPara823" /></flowRoot>    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 40.381131,324.38682 97.037969,294.95058"
+       id="path1291"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g1085"
+       inkscape:connection-end="#g1100" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 173.72427,279.45058 25.46879,0"
+       id="path1293"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g1100"
+       inkscape:connection-end="#g1107" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 10.547803,294.95058 0,29.43624"
+       id="path2046"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g1093"
+       inkscape:connection-end="#g1085" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -6.431173,100.56014 v 0"
+       id="path2050"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -6.431173,106.63962 v 0"
+       id="path2052"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 56.54781,389.99954 23.422488,0"
+       id="path2076"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g1243"
+       inkscape:connection-end="#g1362" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 171.97031,389.99954 27.22275,0"
+       id="path2078"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g1362"
+       inkscape:connection-end="#g2074" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 56.54781,439.10693 23.422488,-0.60408"
+       id="path2295"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g1266"
+       inkscape:connection-end="#g1266-0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 291.19307,389.99954 h 25.46877"
+       id="path2080"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g2074"
+       inkscape:connection-end="#g1289" />
+    <g
+       id="g1266"
+       transform="translate(-86.436889,-13.944819)">
+      <rect
+         ry="0.045807283"
+         y="438.7381"
+         x="50.984684"
+         height="31"
+         width="92.000015"
+         id="rect1038-1-2"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,47.406297,359.19349)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0-2"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3-1"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="200.01021"
+             width="566.69556"
+             id="rect4560-3-8" /></flowRegion><flowPara
+           id="flowPara4562-0-1">Counterplay:</flowPara><flowPara
+           id="flowPara4566-7-8">Use domino which will deny the opponent score</flowPara></flowRoot>    </g>
+    <g
+       id="g1085"
+       transform="translate(63.086495,129.82134)">
+      <rect
+         ry="0.045807283"
+         y="194.56548"
+         x="-98.538696"
+         height="31"
+         width="92.000008"
+         id="rect1038-0"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,-102.38563,111.33861)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="263.52042"
+             width="572.13928"
+             id="rect4560-3" /></flowRegion><flowPara
+           id="flowPara4562-0">Clear Out:</flowPara><flowPara
+           id="flowPara4566-7">Use strongest domino for which there are many with that many spots in hand</flowPara></flowRoot>    </g>
+    <g
+       id="g1100"
+       transform="translate(26.048674,53.510101)">
+      <rect
+         ry="0.045807283"
+         y="210.44048"
+         x="55.675587"
+         height="31"
+         width="92.000008"
+         id="rect1038-2"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,53.404827,130.91025)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0-23"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3-14"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="178.23529"
+             width="550.36432"
+             id="rect4560-3-7" /></flowRegion><flowPara
+           id="flowPara4566-7-0">maxSpots : function to count the most frequent number of spots</flowPara></flowRoot>    </g>
+    <g
+       id="g1289"
+       transform="translate(169.516,-25.685)">
+      <rect
+         ry="0.045807283"
+         y="400.18454"
+         x="147.14584"
+         height="31"
+         width="92.000008"
+         id="rect1038-1"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,143.29891,317.5057)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0-6-1-7-4"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3-7-1-1-2"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="263.52042"
+             width="572.13928"
+             id="rect4560-3-5-3-7-6" /></flowRegion><flowPara
+           id="flowPara4566-7-3-7-1-2">stepBack:</flowPara><flowPara
+           id="flowPara918">Given a Board, figure out what was played last turn and 'undo' that move</flowPara></flowRoot>    </g>
+    <g
+       id="g1107"
+       transform="translate(-2.3813454,58.045822)">
+      <rect
+         ry="0.045807283"
+         y="205.90475"
+         x="201.5744"
+         height="31"
+         width="92.000008"
+         id="rect1038-8"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,199.35686,130.6048)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0-23-2"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3-14-1"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="178.23529"
+             width="550.36432"
+             id="rect4560-3-7-5" /></flowRegion><flowPara
+           id="flowPara4566-7-0-9">filter hand by this and get hsd</flowPara></flowRoot>    </g>
+    <g
+       id="g1093"
+       transform="translate(-53.217078,110.58748)">
+      <rect
+         ry="0.045807283"
+         y="153.3631"
+         x="17.764881"
+         height="31"
+         width="92"
+         id="rect1038"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,14.307309,77.418753)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="200.01021"
+             width="566.69556"
+             id="rect4560" /></flowRegion><flowPara
+           id="flowPara4562">First Move:</flowPara><flowPara
+           id="flowPara4566">If (5,4) in hand, use that</flowPara></flowRoot>    </g>
+    <g
+       transform="translate(64.399625,129.61814)"
+       id="g932-5-4">
+      <g
+         id="g194"
+         transform="translate(6.4311705,8.7697815)">
+        <rect
+           style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.17783146"
+           id="rect924-4-8"
+           width="92.840073"
+           height="31.143234"
+           x="10.0534"
+           y="70.574501"
+           ry="0.077075563" />
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot4556-0-2-3-2-6-2"
+           style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+           transform="matrix(0.14729019,0,0,0.14729019,6.8950406,-8.9675361)"><flowRegion
+             id="flowRegion4558-3-1-7-3-5-5"
+             style="text-align:center;text-anchor:middle;fill:#ffffff"><rect
+               id="rect4560-3-8-81-4-2-0"
+               width="566.69556"
+               height="200.01021"
+               x="51.51778"
+               y="569.96625"
+               style="text-align:center;text-anchor:middle;fill:#ffffff" /></flowRegion><flowPara
+             id="flowPara4562-0-1-0-6-2-0">Target59:</flowPara><flowPara
+             id="flowPara4566-7-8-7-7-1-6">Use domino which will give exactly 59 if in range</flowPara></flowRoot>      </g>
+    </g>
+    <g
+       transform="translate(73.733784,41.644586)"
+       id="g932-5">
+      <rect
+         ry="0.077075563"
+         y="70.574486"
+         x="7.1504116"
+         height="31.143234"
+         width="92.840073"
+         id="rect924-4"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.17783146" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,6.8950406,-8.9704128)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0-2-3-2-6"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3-1-7-3-5"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="200.01021"
+             width="566.69556"
+             id="rect4560-3-8-81-4-2" /></flowRegion><flowPara
+           id="flowPara4562-0-1-0-6-2">Target61:</flowPara><flowPara
+           id="flowPara4566-7-8-7-7-1">Use domino which will give exactly 61 if in range</flowPara></flowRoot>      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M -30.159319,118.94616 13.820282,101.71772"
+         id="path184"
+         inkscape:connector-curvature="0"
+         inkscape:connector-type="polyline"
+         inkscape:connection-start="#g932"
+         inkscape:connection-end="#rect924-4" />
+    </g>
+    <g
+       id="g932"
+       transform="translate(-51.826324,90.394225)">
+      <rect
+         ry="0.077075563"
+         y="70.196526"
+         x="15.534055"
+         height="31.143234"
+         width="92.840073"
+         id="rect924"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.17783146" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,12.375695,-8.8248177)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0-2-3-2"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3-1-7-3"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="200.01021"
+             width="566.69556"
+             id="rect4560-3-8-81-4" /></flowRegion><flowPara
+           id="flowPara4562-0-1-0-6">Target:</flowPara><flowPara
+           id="flowPara4566-7-8-7-7">Use domino which will give the exact score desired</flowPara></flowRoot>    </g>
+    <g
+       id="g1188"
+       transform="translate(56.582934,178.30985)">
+      <rect
+         ry="0.045807283"
+         y="346.88989"
+         x="142.61012"
+         height="31"
+         width="92.000015"
+         id="rect1038-1-9"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,138.73586,267.35966)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0-6-1-7"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3-7-1-1"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="263.52042"
+             width="572.13928"
+             id="rect4560-3-5-3-7" /></flowRegion><flowPara
+           id="flowPara4566-7-3-7-1">Check history for two consecutive turns played by the current player</flowPara></flowRoot>    </g>
+    <g
+       id="g1243"
+       transform="translate(6.0120858,-7.5421168)">
+      <rect
+         ry="0.045807283"
+         y="382.04166"
+         x="-41.464291"
+         height="31"
+         width="92.000015"
+         id="rect1038-1-44"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,-45.052747,299.30528)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0-2-1"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3-1-2"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="200.01021"
+             width="566.69556"
+             id="rect4560-3-8-8" /></flowRegion><flowPara
+           id="flowPara4562-0-1-5">Strongest Move:</flowPara><flowPara
+           id="flowPara4566-7-8-0">Use domino which will make the most 'profit' this round</flowPara></flowRoot>    </g>
+    <g
+       id="g2074"
+       transform="translate(10.530413,47.447324)">
+      <rect
+         ry="0.045807283"
+         y="327.05222"
+         x="188.66264"
+         height="31"
+         width="92.000015"
+         id="rect1038-1-44-1-5"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,185.07418,244.31584)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0-2-1-4-3"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3-1-2-8-6"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="200.01021"
+             width="566.69556"
+             id="rect4560-3-8-8-4-8" /></flowRegion><flowPara
+           id="flowPara4566-7-8-0-0-0">Use scoreN with the resultant boards to figure out their most damaging potential plays</flowPara></flowRoot>    </g>
+    <g
+       transform="translate(121.43459,-7.5421168)"
+       id="g1362">
+      <rect
+         ry="0.045807283"
+         y="382.04166"
+         x="-41.464291"
+         height="31"
+         width="92.000015"
+         id="rect1038-1-44-1"
+         style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+      <flowRoot
+         transform="matrix(0.14729019,0,0,0.14729019,-45.052747,299.30528)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         id="flowRoot4556-0-2-1-4"
+         xml:space="preserve"><flowRegion
+           style="text-align:center;text-anchor:middle;fill:#ffffff"
+           id="flowRegion4558-3-1-2-8"><rect
+             style="text-align:center;text-anchor:middle;fill:#ffffff"
+             y="569.96625"
+             x="51.51778"
+             height="200.01021"
+             width="566.69556"
+             id="rect4560-3-8-8-4" /></flowRegion><flowPara
+           id="flowPara4566-7-8-0-0">Use search with guessDomsInPlay as the opponent's hand to guess the most likely outcomes</flowPara></flowRoot>    </g>
+    <g
+       id="g1188-3"
+       transform="translate(-62.639825,177.25696)">
+      <g
+         id="g2122">
+        <rect
+           style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268"
+           id="rect1038-1-9-0"
+           width="92.000015"
+           height="31"
+           x="142.61012"
+           y="347.94278"
+           ry="0.045807283" />
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot4556-0-6-1-7-5"
+           style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+           transform="matrix(0.14729019,0,0,0.14729019,138.73586,264.70009)"><flowRegion
+             id="flowRegion4558-3-7-1-1-9"
+             style="text-align:center;text-anchor:middle;fill:#ffffff"><rect
+               id="rect4560-3-5-3-7-7"
+               width="572.13928"
+               height="263.52042"
+               x="51.51778"
+               y="569.96625"
+               style="text-align:center;text-anchor:middle;fill:#ffffff" /></flowRegion><flowPara
+             id="flowPara4566-7-3-7-1-0">checkKnocking:</flowPara><flowPara
+             id="flowPara2114">Figure out, using History, what the opponent is knocking on</flowPara></flowRoot>      </g>
+    </g>
+    <g
+       id="g1188-5"
+       transform="translate(172.88857,172.66369)">
+      <g
+         id="g2159"
+         transform="translate(1.1631498,5.6461605)">
+        <rect
+           style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268"
+           id="rect1038-1-9-1"
+           width="92.000015"
+           height="31"
+           x="142.61012"
+           y="346.88989"
+           ry="0.045807283" />
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot4556-0-6-1-7-8"
+           style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+           transform="matrix(0.14729019,0,0,0.14729019,138.73586,267.35966)"><flowRegion
+             id="flowRegion4558-3-7-1-1-4"
+             style="text-align:center;text-anchor:middle;fill:#ffffff"><rect
+               id="rect4560-3-5-3-7-8"
+               width="572.13928"
+               height="263.52042"
+               x="51.51778"
+               y="569.96625"
+               style="text-align:center;text-anchor:middle;fill:#ffffff" /></flowRegion><flowPara
+             id="flowPara4566-7-3-7-1-5">Both ends in the first of those turns will be what the opponent is knocking on</flowPara></flowRoot>      </g>
+    </g>
+    <g
+       id="g1220-1"
+       transform="translate(-20.092332,210.88174)">
+      <g
+         id="g2199"
+         transform="translate(-0.26826794,-67.65607)">
+        <rect
+           style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268"
+           id="rect1038-1-4-0"
+           width="92.000015"
+           height="31"
+           x="-15.383935"
+           y="331.77084"
+           ry="0.045807283" />
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot4556-0-6-1-9"
+           style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+           transform="matrix(0.14729019,0,0,0.14729019,-19.299911,249.04813)"><flowRegion
+             id="flowRegion4558-3-7-1-9"
+             style="text-align:center;text-anchor:middle;fill:#ffffff"><rect
+               id="rect4560-3-5-3-70"
+               width="572.13928"
+               height="263.52042"
+               x="51.51778"
+               y="569.96625"
+               style="text-align:center;text-anchor:middle;fill:#ffffff" /></flowRegion><flowPara
+             id="flowPara4566-7-3-7-5">guessDomsInPlay:</flowPara><flowPara
+             id="flowPara2191">guess what's in play using everything not on the board or in the hand</flowPara></flowRoot>      </g>
+      <g
+         transform="translate(222.37744,-43.862346)"
+         id="g2199-6">
+        <g
+           id="g2241"
+           transform="translate(-106.93088,-25.256008)">
+          <rect
+             ry="0.045807283"
+             y="331.77084"
+             x="-15.383935"
+             height="31"
+             width="92.000015"
+             id="rect1038-1-4-0-6"
+             style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268" />
+          <flowRoot
+             transform="matrix(0.14729019,0,0,0.14729019,-19.299911,259.5893)"
+             style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+             id="flowRoot4556-0-6-1-9-2"
+             xml:space="preserve"><flowRegion
+               style="text-align:center;text-anchor:middle;fill:#ffffff"
+               id="flowRegion4558-3-7-1-9-2"><rect
+                 style="text-align:center;text-anchor:middle;fill:#ffffff"
+                 y="569.96625"
+                 x="51.51778"
+                 height="263.52042"
+                 width="572.13928"
+                 id="rect4560-3-5-3-70-1" /></flowRegion><flowPara
+               id="flowPara2191-6">filter by checkKnocking</flowPara></flowRoot>        </g>
+        <path
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m -146.02963,322.89582 23.71482,-0.29968"
+           id="path2243"
+           inkscape:connector-type="polyline"
+           inkscape:connector-curvature="0"
+           inkscape:connection-start="#g2199"
+           inkscape:connection-end="#g2241" />
+        <path
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m -76.314804,337.51484 10e-7,20.66551"
+           id="path2247"
+           inkscape:connector-type="polyline"
+           inkscape:connector-curvature="0"
+           inkscape:connection-start="#g2241"
+           inkscape:connection-end="#g1188-3" />
+        <path
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m -30.314795,373.68035 27.2227434,0"
+           id="path2249"
+           inkscape:connector-type="polyline"
+           inkscape:connector-curvature="0"
+           inkscape:connection-start="#g1188-3"
+           inkscape:connection-end="#g1188" />
+        <path
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 88.907964,373.68035 25.468766,0"
+           id="path2251"
+           inkscape:connector-type="polyline"
+           inkscape:connector-curvature="0"
+           inkscape:connection-start="#g1188"
+           inkscape:connection-end="#g1188-5" />
+      </g>
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 64.074384,264.11477 40.628776,-18.6721"
+         id="path210"
+         inkscape:connector-curvature="0"
+         inkscape:connector-type="polyline"
+         inkscape:connection-end="#g1266-0"
+         inkscape:connection-start="#g2199" />
+    </g>
+    <g
+       id="g1266-0"
+       transform="translate(28.985614,-20.429508)">
+      <g
+         id="g2293">
+        <rect
+           style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.22287667"
+           id="rect1038-1-2-1"
+           width="92.000015"
+           height="38.015823"
+           x="50.984684"
+           y="438.7381"
+           ry="0.056174248" />
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot4556-0-2-4"
+           style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+           transform="matrix(0.14729019,0,0,0.14729019,47.406297,355.4893)"><flowRegion
+             id="flowRegion4558-3-1-5"
+             style="text-align:center;text-anchor:middle;fill:#ffffff"><rect
+               id="rect4560-3-8-9"
+               width="562.72614"
+               height="315.12247"
+               x="51.51778"
+               y="569.96625"
+               style="text-align:center;text-anchor:middle;fill:#ffffff" /></flowRegion><flowPara
+             id="flowPara4566-7-8-2">use guessDomsInPlay/checkKnocking to deny them a turn by playing something they can't respond to</flowPara></flowRoot>      </g>
+    </g>
+    <g
+       id="g1093-3"
+       transform="translate(-53.217078,371.83665)">
+      <g
+         id="g2340">
+        <rect
+           style="fill:#066e8a;fill-opacity:1;stroke:none;stroke-width:0.20126268"
+           id="rect1038-82"
+           width="92"
+           height="31"
+           x="17.764881"
+           y="153.3631"
+           ry="0.045807283" />
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot4556-6"
+           style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+           transform="matrix(0.14729019,0,0,0.14729019,14.307309,74.366509)"><flowRegion
+             id="flowRegion4558-9"
+             style="text-align:center;text-anchor:middle;fill:#ffffff"><rect
+               id="rect4560-2"
+               width="566.69556"
+               height="200.01021"
+               x="51.51778"
+               y="569.96625"
+               style="text-align:center;text-anchor:middle;fill:#ffffff" /></flowRegion><flowPara
+             id="flowPara4566-6">hsdPlayer:</flowPara><flowPara
+             id="flowPara2332">play the highest-scoring Dom</flowPara></flowRoot>      </g>
+    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 10.547803,279.45058 v 0"
+       id="path196"
+       inkscape:connector-curvature="0"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g1093"
+       inkscape:connection-end="#g1093" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 40.381131,324.38682 97.037969,294.95058"
+       id="path198"
+       inkscape:connector-curvature="0"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g1085"
+       inkscape:connection-end="#g1100" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 173.72427,279.45058 25.46879,0"
+       id="path200"
+       inkscape:connector-curvature="0"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g1100"
+       inkscape:connection-end="#g1107" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 56.54781,439.10693 23.422488,-0.60408"
+       id="path208"
+       inkscape:connector-curvature="0"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g1266"
+       inkscape:connection-end="#g1266-0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 43.57447,191.73398 43.979591,17.22844"
+       id="path214"
+       inkscape:connector-curvature="0"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g932"
+       inkscape:connection-end="#g932-5-4" />
+  </g>
+</svg>
