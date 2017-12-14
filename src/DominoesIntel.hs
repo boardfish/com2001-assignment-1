@@ -8,19 +8,54 @@ module DomsIntel where
     -- | intelligentPlayer employs six Tactics situationally: 
     -- clearOut - chooses a Dom with the most frequent number of spots on either 
     -- side, 
-    -- target53 - chooses a Dom that gets the player as close to 61 as possible
+    -- target59 - chooses a Dom that gets the player as close to 61 as possible
     -- denyMoves - uses what the opponent is knocking on to deny them a turn
     -- denyAllMoves - uses all unplayed doms as a basis for denying a turn
     -- hsd - inherits from hsdPlayer as a final fallback when on the back foot
+    -- To create another intelligentPlayer with this framework, a Tactic is
+    -- necessary. Like DomsPlayers, they run on the assumption that a move can
+    -- be made, so a suitable predicate is necessary too. This can either be a
+    -- function of its own (canDenyMoves), or in a where clause (canGet59).
+    intelligentPlayer3 :: DomsPlayer
+    intelligentPlayer3 h b p s
+      | canWin = forTheWin h b p s
+      | canGet59 = target59 h b p s
+      | canDenyAllMoves h b p = denyAllMoves h b p s
+      | canDenyMoves h b p = denyMoves h b p s
+      | canTarget59 = target59 h b p s
+      -- | ps >= os = clearOut h b p s
+      | otherwise = hsdPlayer h b p s
+      where (ps,os)     = getPlayerScore p s 
+            canWin = not (null (scoreExactly (61-ps) h b))
+            canGet59 = not (null (scoreExactly (59-ps) h b)) && ps /= 59
+            canTarget59 = not (null (scoreOrLess (59-ps) (59-ps) h b)) && ps >= 53
+
+    intelligentPlayer2 :: DomsPlayer
+    intelligentPlayer2 h b p s
+      | canWin = forTheWin h b p s
+      | canGet59 = target59 h b p s
+      | canDenyAllMoves h b p = denyAllMoves h b p s
+      | canDenyMoves h b p = denyMoves h b p s
+      | canTarget59 = target59 h b p s
+      | ps >= os = clearOut h b p s
+      | otherwise = hsdPlayer h b p s
+      where (ps,os)     = getPlayerScore p s 
+            canWin = not (null (scoreExactly (61-ps) h b))
+            canGet59 = not (null (scoreExactly (59-ps) h b)) && ps /= 59
+            canTarget59 = not (null (scoreOrLess (59-ps) (59-ps) h b)) && ps >= 53
+
     intelligentPlayer :: DomsPlayer
     intelligentPlayer h b p s
-      | canWin h b p s = trace "FOR THE WIN" forTheWin h b p s
-      | canDenyAllMoves h b p = trace "DENY ALL MOVES" denyAllMoves h b p s
-      | canDenyMoves h b p = trace "DENY MOVES" denyMoves h b p s
-      | ps > 53 = trace "TARGET 53" target53 h b p s
-      | ps >= os = trace "CLEAR OUT" clearOut h b p s
-      | otherwise = trace "----------" hsdPlayer h b p s
-      where (ps,os) = getPlayerScore p s 
+      | canWin = forTheWin h b p s
+      | canTarget59 = target59 h b p s
+      | ps >= os = clearOut h b p s
+      | canDenyAllMoves h b p = denyAllMoves h b p s
+      | canDenyMoves h b p = denyMoves h b p s
+      | otherwise = hsdPlayer h b p s
+      where (ps,os)     = getPlayerScore p s 
+            canWin = not (null (scoreExactly (61-ps) h b))
+            canGet59 = not (null (scoreExactly (59-ps) h b)) && ps /= 59
+            canTarget59 = not (null (scoreOrLess (59-ps) (59-ps) h b)) && ps >= 53
 
     --------------------
     --HELPER FUNCTIONS--
@@ -96,10 +131,12 @@ module DomsIntel where
     -- | unplayedDoms returns all Doms that are not in the given Hand or on the
     -- given Board.
     unplayedDoms :: Hand -> DomBoard -> Hand
-    -- Assumes all doms in hand are highest no. first
+    -- Assumes all doms in hand are highest no. first, so doesn't check swap x 
+    -- there
     unplayedDoms h InitBoard = filter (\x -> not (elem x h)) domSet 
     -- TODO: Neaten
-    unplayedDoms h b = filter (\x -> not (elem x h || elem x board || elem (swap x) board)) domSet 
+    unplayedDoms h b = filter (\x -> 
+        not (elem x h || elem x board || elem (swap x) board)) domSet 
         where 
             board = rebuildBoard b
 
@@ -142,9 +179,9 @@ module DomsIntel where
       | p == P1 = (p1s,p2s)
       | otherwise = (p2s,p1s)
 
-    ------------------------------------
-    --COUNTERPLAYS AGAINST KNOWN HANDS--
-    ------------------------------------
+    ----------------------------
+    --COUNTERPLAYS TO OPPONENT--
+    ----------------------------
 
     -- | sortHistory sorts a given DomBoard's History by turn number, as opposed
     -- to the default ordering of the actual board state.
@@ -175,6 +212,13 @@ module DomsIntel where
     filterSpots h [] = h
     filterSpots h s = filter (\(x,y) -> not (elem x s || elem y s)) h
 
+    -- | filterOnlySpots removes all Doms from the given Hand that don't have 
+    -- any number of spots listed in the given list s.
+    filterOnlySpots :: Hand -> [Int] -> Hand
+    filterOnlySpots [] _ = []
+    filterOnlySpots h [] = h
+    filterOnlySpots h s = filter (\(x,y) -> (elem x s || elem y s)) h
+
     -- | The drops function returns all doms in the given Hand that can be 
     -- played on the given Board. In keeping with leftdrops and rightdrops, it's 
     -- named simply 'drops'.
@@ -188,7 +232,7 @@ module DomsIntel where
     checkKnocking acc p (Board l r (turn:[])) = acc
     checkKnocking acc p b
       | p1 /= p2 = checkKnocking acc p (stepBack b) --other play responded
-      | p1 /= p = checkKnocking acc p (stepBack b) --home player knocked
+      | p1 == p = checkKnocking acc p (stepBack b) --home player knocked
       | otherwise = checkKnocking (lastL : lastR : acc) p (stepBack b)
      where (Board (lastL,_) (_,lastR) _) = stepBack b
            (Board _ _ ((lDom, p1, _):(l2Dom, p2, _):_)) = sortHistory b
@@ -202,19 +246,22 @@ module DomsIntel where
 
     -- | The canDenyMoves predicate checks if the player is able to directly 
     -- deny the opposing player a move, using the history to check when they 
-    -- knocked.
+    -- knocked. As it's a little longer than other predicates in the where
+    -- clause of intelligentPlayer, it's moved here.
     canDenyMoves :: Hand -> DomBoard -> Player -> Bool
+    -- TODO: remove ends from knocks list
     canDenyMoves h b p = 
         let knocks = checkKnocking [] (otherPlayer p) b
-            possplays = drops (filterSpots h knocks) b
-         in not (null possplays)
+            possplays = drops (filterOnlySpots h knocks) b
+         in not (null possplays) && not (null knocks)
 
     -- | The denyMoves tactic plays a Dom with a number of spots that their 
     -- opponent cannot respond to, based on the player's knowledge of End values 
     -- on which the opponent is knocking.
     denyMoves :: Tactic
-    denyMoves h b p s = trace (show knocks ++ " " ++ show b) (d,e)
-        where (d,e,_) = hsd (filterSpots h knocks) b
+    -- TODO: remove ends from knocks list
+    denyMoves h b p s = (d,e)
+        where (d,e,_) = hsd (filterOnlySpots h knocks) b
               knocks = checkKnocking [] (otherPlayer p) b
 
     -- | The denyAllMoves tactic plays a domino with a number of spots that their 
@@ -222,6 +269,7 @@ module DomsIntel where
     -- the power to do this, as they can counter any Dom, whether in the
     -- opponent's Hand or sleeping.
     denyAllMoves :: Tactic
+    -- TODO: remove ends from knocks list
     denyAllMoves h b p s = (d,e)
         where (d,e,_) = hsd (filterSpots h domsInPlay) b
               domsInPlay = handToSpots (guessDomsInPlay p h b)
@@ -230,6 +278,7 @@ module DomsIntel where
     -- deny the opposing player a move, using the history to check when they 
     -- knocked and which dominoes they potentially could have.
     canDenyAllMoves :: Hand -> DomBoard -> Player -> Bool
+    -- TODO: remove ends from knocks list
     canDenyAllMoves h b p = 
         let domsInPlay = handToSpots (guessDomsInPlay p h b)
             possplays = drops (filterSpots h domsInPlay) b
@@ -280,10 +329,10 @@ module DomsIntel where
       | otherwise = scoreOrLess s (n-1) h b
       where validDoms = scoreExactly n h b
 
-    -- | target53 is a tactic that searches for a Dom that can close the
+    -- | target59 is a tactic that searches for a Dom that can close the
     -- gap between the player's current score and 61.
-    target53 :: Tactic
-    target53 h b p s
+    target59 :: Tactic
+    target59 h b p s
         | not (goesRP d b) = (d,L)
         | not (goesLP d b) = (d,R)
         | scoreLeft >= scoreRight= (d,L)
@@ -291,15 +340,10 @@ module DomsIntel where
         where scoreLeft = scoreDom d L b
               scoreRight = scoreDom d R b
               (ps,_) = getPlayerScore p s
-              (d:ds) = scoreOrLess (61-ps) (61-ps) h b 
+              (d:ds) = scoreOrLess (59-ps) (59-ps) h b 
 
-    -- | canWin determines whether a player can directly close the gap between 
-    -- their current score and 61 in a single move.
-    canWin :: Hand -> DomBoard -> Player -> Scores -> Bool
-    canWin h b p s = not (null (scoreExactly (61-ps) h b))
-      where (ps,_) = getPlayerScore p s
-
-    -- | forTheWin plays the winning domino.
+    -- | forTheWin plays the winning domino under the assumption that this is
+    -- possible.
     forTheWin :: Tactic
     forTheWin h b p s = (d,e)
       where (ps,_) = getPlayerScore p s

@@ -1,505 +1,250 @@
 # Foreword
 
-This assignment revolved around replicating the mechanics of the game Dominoes, particularly in relation to the fives-and-threes ruleset. Naturally, the base game is very extensible, and many of the functions I have devised can be easily retooled for use in other rulesets, but many of the methods here are specific to fives-and-threes. Here, I have tested a variety of cases at length - all sample console output is taken from GHCI with the domino.hs module loaded. 
+This assignment involved extending the Dominoes framework and Haskell even
+further to build intelligent players. These aimed to deal effectively with a
+variety of situations in a similar manner to a competitive fives-and-threes
+player. Here, I have tested the players' various tactics and the helper methods
+that comprise them.
 
-# Helper Methods
+\pagebreak
 
-## swap
+# Testing
 
-This method didn't load when I specified Domino was a pair, and should function exactly as the original did, simply by swapping the two integers in the pair.
+## `forTheWin`
 
-### Sample output
+`intelligentPlayer3` will play the winning `Dom` if it is within range and has a
+`Dom` with the exact score necessary to hit 61 and win.
 
-```
-*Main> swap (1,2)
-(2,1)
-```
-
-## defaultPositionP
-
-This method determines whether or not the domino is in what one would assume to be its default position - with the greater number on the left. It is used in scoreN to filter out any duplicate entries that arise when a domino is not in its default position.
-
-### Sample output
-
-```
-*Main> defaultPositionP (2,3)
-True
-*Main> defaultPositionP (3,2)
-False
-*Main> defaultPositionP (3,3)
-True
-```
-
-## score
-
-This method, given two integers, determines the score they would give according to fives-and-threes rules.
-
-### Tests
-
-#### Multiple of 5
-
-```
-*Main> score 2 3
-1
-*Main> score 7 3
-2
-```
-
-#### Multiple of 3
-
-```
-*Main> score 3 0
-1
-*Main> score 6 0
-2
-```
-
-#### Mutual multiple
-
-Fives-and-threes rules state that if a score is a multiple of both three and five (that is, a multiple of 15), both are taken into account in the final sum. In an example given in the provided documentation, 15 scores 8 as it is both 3 \* **5** and 5 \* **3**.
-
-```
-*Main> score 15 0
-8
-```
-
-#### Multiple of neither
-
-```
-*Main> score 1 0
-0
-*Main> score 2 0
-0
-*Main> score 4 0
-0
-*Main> score 7 0
-0
-```
-
-## scoreDom
-
-This function returns the score given after a certain domino has been played, provided that is indeed possible. It is based on, and therefore its correctness is proven by, `playDom` and `scoreBoard` in combination. It serves as a helper method, particularly for `scoreN`.
-
-### Tests
-
-#### Board is empty
-
-```
-*Main> scoreDom (0,3) L []
-1
-```
-
-#### Domino isn't playable
-
-```
-*Main> scoreDom (7,7) L [(0,0),(0,3)] 
-0
-```
-
-#### Play results in a score
-
-```
-*Main> scoreDom (3,5) R [(0,0),(0,3)] 
-1
-```
-
-#### Play does not result in a score
-
-```
-*Main> scoreDom (3,2) R [(0,0),(0,3)]
-0
-```
-
-## scoreEnds
-
-This function returns the score generated from two given dominos as though they were the two ends of a board. This counts double dominoes. If scoring were to be based on the outer spots of the ends alone, this would be taken with the `score` function, but additional logic is necessary in the event of a double domino.
-
-### Tests
-
-#### Dominoes do not generate a score
-
-```
-*Main> scoreEnds (0,3) (3,2)
-0
-```
-#### Dominoes generate a score
-
-```
-*Main> scoreEnds (0,1) (1,3)
-1
-```
-#### Either domino is a double
-
-```
-*Main> scoreEnds (0,3) (3,3)
-2
-*Main> scoreEnds (3,3) (3,0)
-2
-```
-
-#### Both dominoes are doubles
-
-```
-*Main> scoreEnds (6,6) (3,3)
-6
-```
-
-## turnDomino
-
-This function returns either a given domino or its swapped configuration, based on the board and end provided. Erroneous inputs will return the domino in its current configuration.
-
-### Tests
-
-#### End provided for which the domino should be flipped
-
-```
-*Main> turnDomino (1,0) L [(1,2),(2,0)]
-(0,1)
-*Main> turnDomino (1,0) R [(1,2),(2,0)]
-(0,1)
-```
-
-#### End provided for which the domino should not flip
-
-```
-*Main> turnDomino (0,1) L [(1,2),(2,0)]
-(0,1)
-*Main> turnDomino (0,1) R [(1,2),(2,0)]
-(0,1)
-```
-
-#### Board is empty
-
-The original domino is returned in any case.
-
-```
-*Main> turnDomino (0,1) L []
-(0,1)
-*Main> turnDomino (0,1) R []
-(0,1)
-```
-
-## scoreNP
-
-This predicate returns whether or not playing a given domino would result in a given score. The logic is primarily inherited from the scoreDom helper function, and as a combined predicate, it is used mostly to make `scoreN` more concise.
-
-### Tests
-
-#### Domino would score at left
-
-```
-*Main> scoreNP (0,3) [(0,0),(0,2)] 1
-True
-```
-
-#### Domino would score at right
-
-```
-*Main> scoreNP (0,3) [(2,0),(0,0)] 1
-True
-```
-
-#### Domino would not score
+### `forTheWin` in action
 
-```
-*Main> scoreNP (0,4) [(2,0),(0,0)] 1
-False
-```
-
-#### Domino would not be valid
-
-```
-*Main> scoreNP (3,4) [(2,0),(0,0)] 1
-False
-```
-
-#### Domino would be first in play and result in a score
-
-TODO: OH SHIT
-
-```
-*Main> scoreNP (2,3) [] 1
-True
-*Main> scoreNP (3,3) [] 2
-True
-```
-
-#### Domino would be first in play and not result in a score
-
-```
-*Main> scoreNP (2,2) [] 1
-False
-```
-
-# Marked Methods
-
-## playedP
-
-This method simply checks whether a domino is on the board in either possible configuration.
-
-### Tests
-
-#### Domino is on the board
-
-```
-*Main> playedP (1,0) [(1,0)]
-True
-```
-
-#### Domino is not on the board
-
-```
-*Main> playedP (1,0) []
-False
-```
-
-#### Domino is on the board in its flipped position
-
-```
-*Main> playedP (1,0) [(0,1)]
-True
-```
-
-## goesP
-
-This method checks whether or not a domino is playable at a given end. It uses the two helper methods `goesLeftP` and  `goesRightP`, which compare the given Domino and End with pattern matching.
-
-### Tests
-
-#### Domino is playable at the given end
-
-```
-*Main> goesP (1,0) L [(0,0),(0,3)]
-True
-```
-
-#### Domino is playable at the given end in its flipped position
-
-```
-*Main> goesP (1,0) R [(3,2),(2,0)]
-False
-```
-
-This scenario is catered for by goesSwappedP.
-
-#### Domino is not playable at the given end
-
-```
-*Main> goesP (1,0) R [(3,2),(2,5)]
-False
-```
-
-#### Board is empty
+As observed here in the final move of `domsMatch hsdPlayer intelligentPlayer3 100
+9`, `intelligentPlayer3` recognises that it is within a potential 3-point move
+for the win. It has 58 points, and to place `(6,5)` at the left of this
+newly-reset board will win it the game.
 
-An End is still required as an argument, but it does not affect the outcome.
+***Key**: TACTIC: Scores | Board Left End Right End History | Chosen Move*
 
+```haskell
+FTW: (52,58) Board (6,4) (6,4) [((6,4),P1,1)] ((6,5),L)
 ```
-*Main> goesP (1,0) L []
-True
-```
-
-## knockingP
-
-This method checks whether the player has at least one playable Domino in their hand, and returns `True` if this is not the case, signifying that they are knocking.
 
-### Tests
+## `denyAllMoves`
 
-#### Hand is empty
+If `intelligentPlayer3` can attack on not only the opponent's knocks, but the
+entire set of unplayed `Dom`s too, then it will choose to broaden its attack in
+this way.
 
-```
-*Main> knockingP [] []
-True
-```
-
-#### Hand has dominoes that are not playable
-
-```
-*Main> knockingP [(1,0)] [(2,5)]
-True
-```
+### `denyAllMoves` in action
 
-#### Hand has playable dominoes
+As observed in these trace logs, `intelligentPlayer3` uses `denyAllMoves` when it
+knows for sure that it can deny any unplayed `Dom`, whether the opponent is
+knocking or the `Dom` is resting. The scores here are not shown for conciseness,
+but you can observe that the previous turn was taken by `intelligentPlayer3`,
+player 2 (turn 14 at the right). This shows that `intelligentPlayer3`'s opponent was successfully denied 
+a move.
 
+```haskell
+DNA:
+Doms in play: [(4,3),(4,2),(3,3),(2,2)]
+Chosen move: ((1,1),R)
+DNY: Board (6,6) (1,1) [((6,6),P2,11),((6,4),P2,9),((4,1),P2,7),
+                        ((1,5),P1,6),((5,5),P1,1),((5,4),P2,2),
+                        ((4,4),P1,3),((4,0),P2,4),((0,5),P1,5),
+                        ((5,6),P1,8),((6,0),P1,10),((0,0),P1,12),
+                        ((0,1),P1,13),((1,1),P2,14)] ((3,1),R)
 ```
-*Main> knockingP [(5,0)] [(2,5)]
-False
-```
 
-#### Board is empty, and hand is not
-
-```
-*Main> knockingP [(0,1)] []
-False
-```
+## `target59`
 
-## playDom
+As `intelligentPlayer3` closes in on 61, it uses the move that will take it
+closest to 59 if it cannot win directly.
 
-This method returns the Board created when a given Domino is played, but will return Nothing if any part of the move is valid.
+### `target59` in action
 
-### Tests
+As observed in these trace logs, `intelligentPlayer3` breaks into a `target59`
+strategy as soon as its score hits 53. This follows nicely into `forTheWin`,
+which takes priority and is used as soon as possible.
 
-#### Domino is playable
+An additional predicate sits just below `forTheWin` which, after implementation,
+gave five additional wins when running `domsMatch intelligentPlayer3 hsdPlayer
+100 94`.
 
+```haskell
+DNY: (49,45) ((5,5),R)
+TAR: (49,53) ((6,0),R)
+TAR: (50,54) ((6,6),L)
+TAR: (54,58) ((6,3),L)
+TAR: (54,59) ((1,0),R)
+TAR: (56,60) ((1,1),R)
+FTW: (58,60) ((5,0),R)
+DNY: (0,0) ((6,3),L)
 ```
-*Main> playDom (2,3) L [(3,2)]
-Just [(2,3),(3,2)]
-*Main> playDom (2,5) R [(3,2)] 
-Just [(3,2),(2,5)]
-```
 
-#### Domino is playable in its flipped position
+## `denyMoves`
 
-```
-*Main> playDom (2,5) R [(3,5)]
-Just [(3,5),(5,2)]
-```
+If `intelligentPlayer3` is able to deny its opponent a move, using the `DomBoard`
+`History` to determine what they're knocking on, then it will. `intelligentPlayer3`
+will select a `Dom` that the opponent is knocking on to buy itself an extra
+turn.
 
-#### Domino is not playable
+### `denyMoves` in action
 
+In the logs below, `intelligentPlayer3` recognises that its opponent is knocking
+on 
 ```
-*Main> playDom (2,5) L [(3,4)] 
-Nothing
-*Main> playDom (2,5) R [(3,4)] 
-Nothing
+DNY: [3,2]Board (3,4) (2,0) [((3,4),P1,7),((4,0),P2,6),((0,6),P1,5),
+                             ((6,6),P1,1),((6,1),P2,2),((1,3),P1,3),
+                             ((3,3),P2,4),((3,2),P2,8),((2,1),P1,9),
+                             ((1,4),P2,10),((4,5),P1,11),((5,2),P2,12),
+                             ((2,0),P2,13)] ((5,0),R)
+DNY: [3,2]Board (3,4) (0,5) [((3,4),P1,7),((4,0),P2,6),((0,6),P1,5),
+                             ((6,6),P1,1),((6,1),P2,2),((1,3),P1,3),
+                             ((3,3),P2,4),((3,2),P2,8),((2,1),P1,9),
+                             ((1,4),P2,10),((4,5),P1,11),((5,2),P2,12),
+                             ((2,0),P2,13),((0,5),P1,14)]
+((5,1),R)
+HSD: Board (3,4) (5,1) [((3,4),P1,7),((4,0),P2,6),((0,6),P1,5),((6,6),P1,1),((6,1),P2,2),((1,3),P1,3),((3,3),P2,4),((3,2),P2,8),((2,1),P1,9),((1,4),P2,10),((4,5),P1,11),((5,2),P2,12),((2,0),P2,13),((0,5),P1,14),((5,1),P1,15)] ((1,1),R)
 ```
 
-#### Board is empty
+#### Aside: on `denyMoves`
 
-An End must still be provided.
-
-```
-*Main> playDom (1,0) L [] 
-Just [(1,0)]
-*Main> playDom (1,0) R [] 
-Just [(1,0)]
-```
+What I originally considered a bug in `denyMoves` may actually be a feature.
+`canDenyMoves` is still `True` if the other `Player` isn't knocking on anything.
+`denyMoves` reduces to `hsdPlayer` in this case, as it simply chooses the
+highest scoring `Dom` from an unfiltered `Hand`. Testing with 100 games each on
+the following five seeds gave these results:
 
-## scoreBoard
+- **Seed 94** - **-1**
+- **Seed 95** - **-4**
+- **Seed 96** - **+1**
+- **Seed 97** - **+1**
+- **Seed 98** - **-1**
 
-This method figures out the score that a given Board is worth. This includes whether there is a double piece at either end.
+Particularly with regards to the majority of negative results, I decided to keep
+this little foresight in, as it actually seems to pay off.
 
-### Tests
+I find it equally strange that prioritising it over `target59` where getting
+`59` itself is not actually possible also results in higher scores, but this
+could be because `target59`'s predicate is much more general compared to that of
+`denyMoves` and may prevent it from playing more offensively against the other
+player. When the other player *is* knocking, `denyMoves` can attack in
+close-call situations where both players are in endgame and win
+`intelligentPlayer3` the game.
 
-#### Board is empty
+## `clearOut`
 
-```
-*Main> scoreBoard []
-0
-```
+When `intelligentPlayer3` has the lead in middlegame, it uses `clearOut`.
+`clearOut` uses the strongest `Dom` that has the most frequent number of spots
+in the hand on one or both sides. 
 
-#### Board has one domino
+### `clearOut` in action
 
-```
-*Main> scoreBoard [(0,3)]
-1
-```
+The `DomBoard` was reset to the `InitBoard` type before this move was made, and
+as such, the player could not determine the opponent's `Hand` from the
+`DomBoard` `History`. Hence, `intelligentPlayer3` resorted to `clearOut`, which
+made the highest-scoring move with the domino that had the most frequent number
+of spots, that being 6.
 
-#### Board has multiple dominoes
+```haskell
+CLR: [(2,1),(3,0),(1,1),(5,3),(6,3),(5,0),(6,5),(6,6),(2,2)]  
+(35,45) ((6,6),L)
 ```
-*Main> scoreBoard [(0,3),(3,5)]
-1
-```
 
-#### One end is a double
+#### Aside: on `denyMoves` and `clearOut`
 
-```
-*Main> scoreBoard [(0,3),(3,3)]
-2
-*Main> scoreBoard [(3,3),(3,0)]
-2
-```
+Upon testing, I discovered that when `checkKnocking` returns an empty list -
+that is, the opponent is believed to have `Dom`s of all spot counts -
+`denyMoves` reduces to `hsdPlayer`. I then added an extra conditional to
+`canDenyMoves` to ensure the player's `Hand` and the filtered `Hand` were not
+equal, in which case `canDenyMoves` would return False. In cases where the
+player was losing at that time, it would fall back to `clearOut`.  By
+eliminating `clearOut` from `intelligentPlayer3` entirely, the performance of
+`intelligentPlayer3` *improved*, despite this being recommended as a path to
+take when developing the player - `clearOut` was clearly making moves that would
+lose the game.
 
-#### Both ends are doubles
+For the reasons described above, `clearOut` and its associated functions are
+present but not used in `intelligentPlayer3`. Its previous implementation within
+`intelligentPlayer3` is commented out. However, upon further experimentation
+after making `target59` chase 59 rather than 60, it seems that `clearOut` is
+still a setback, hence it remains as described above, but the number of games
+its use loses for `intelligentPlayer3` varies.
 
-```
-*Main> scoreBoard [(3,3),(3,0),(0,2),(2,2)]
-2
-```
+#### Aside: on `denyMoves` and `target59`
 
-## possPlays
+It seems that in select cases, prioritising offensive plays against forcefully
+aiming for the necessary score can win singular games. For example, playing
+`domsMatch hsdPlayer intelligentPlayer3 100 85` with `denyMoves` prioritised over
+`target59` can win just one more game over `hsdPlayer`.
 
-This method determines all possible plays that a player can make with their Hand on a given Board.
+## `hsdPlayer`
 
-### Tests
+This is `intelligentPlayer3`'s final fallback when it is losing and cannot make any
+strong endgame moves. It is inherited from the original `domsMatch` code, and as
+such is not tested here.
 
-#### Hand has one or more playable dominoes
+\pagebreak
 
-```
-*Main> possPlays [(0,1)] [(1,3),(3,2)] ([],[])
-([(0,1)],[])
-*Main> possPlays [(0,1),(2,5)] [(1,3),(3,2)] ([],[])
-([(0,1)],[(2,5)])
-*Main> possPlays [(0,1),(2,5)] [(6,3),(3,2)] ([],[])
-([],[(2,5)])
-```
+# Players
 
-#### Hand has a domino playable at either end
+## Description
 
-```
-*Main> possPlays [(3,5)] [(3,3)] ([],[])
-([(3,5)],[(3,5)])
-```
+### intelligentPlayer
 
-#### Hand has no playable dominoes
+A more individual, unaware player that focuses on clearing out its hand and only
+plays offensively as a fallback. This player turned out somewhat weak - at
+first, I focused on creating just one intelligent player that was as strong as I
+could make it, so this was more of a stepping stone on that path that I'm
+keeping for comparison's sake.
 
-```
-*Main> possPlays [(4,5)] [(1,3),(3,2)] ([],[])
-([],[])
-```
+### intelligentPlayer2
 
-#### Hand has no dominoes
+A more offensive player that still tries to "clear out" dominoes it has a lot of
+if it has the lead. This helps it beat its predecessor, but interestingly, using
+`clearOut` when it has the lead has a questionable effect on play - in seed 64,
+it wins one game less, in seed 98, it ties, and in seed 196, it pulls an extra
+game from its superior. 
 
-```
-*Main> possPlays [] [(1,3),(3,2)] ([],[])
-([],[])
-```
+It's clear that `clearOut` is something of a questionable strategy. Whether
+(theoretically) implementing it by playing only one number of spots where
+possible, or by playing the most frequent number of spots in the hand as I have
+here, `clearOut` is likely to leave its player knocking by concentrating or
+spreading the spot distribution across `Dom`s respectively.
 
-#### Board has no dominoes
+### intelligentPlayer3
 
-```
-*Main> possPlays [(1,0),(2,3)] [] ([],[])
-([(1,0),(2,3)],[(1,0),(2,3)])
-```
+intelligentPlayer3 makes use of the `Board` and its `History` a major priority,
+resorting to attacking as soon as it can't play a winning or endgame move, and
+only playing the highest scoring `Dom` if it can't do either. This reactive play
+makes it the strongest I have made. 
 
-#### Neither hand nor board has dominoes
+\pagebreak
 
-```
-*Main> possPlays [] [] ([],[])
-([],[])
-```
+## Results
 
-## scoreN
+100 games were played between each of the three `domsPlayer`s. Here are the
+number of victories each obtained in their matchups.
 
-This method relies primarily on the predicate function `scoreNP`.
+### Seed 64
 
-### Tests
+| H/A | iP1 | iP2 | iP3 |
+|:---:|:---:|:---:|:---:|
+| iP  | NA  |  46 |  38 |
+| iP2 | 54  |  NA |  37 |
+| iP3 | 62  |  63 |  NA |
 
-#### Board has no dominoes
+### Seed 98
 
-```
-*Main> scoreN [] 0
-[(0,0),(0,1),(0,2),(0,4),(1,1),(1,3),(1,6),(2,2),(2,5),(2,6),(3,4),(3,5),(4,4),(5,6)]
-*Main> scoreN [] 1
-[(0,3),(0,5),(1,2),(1,4),(2,3)]
-*Main> scoreN [] 2
-[(0,6),(1,5),(2,4),(3,3),(4,6),(5,5)]
-*Main> scoreN [] 3
-[(3,6),(4,5)]
-*Main> scoreN [] 4
-[(6,6)]
-```
+| H/A | iP1 | iP2 | iP3 |
+|:---:|:---:|:---:|:---:|
+| iP  | NA  |  48 |  33 |
+| iP2 | 52  |  NA |  33 |
+| iP3 | 67  |  67 |  NA |
 
-#### Board has one or more dominoes
+### Seed 196
 
-```
-*Main> scoreN [(1,2)] 0
-[(0,1),(0,2),(1,1),(1,5),(1,6),(2,3),(2,6)]
-*Main> scoreN [(1,2)] 1
-[(1,3),(2,2),(2,4)]
-*Main> scoreN [(1,2)] 2
-[(1,4),(2,5)]
-*Main> scoreN [(1,2)] 3
-[]
-*Main> scoreN [(1,2)] 4
-[]
-```
+| H/A | iP1 | iP2 | iP3 |
+|:---:|:---:|:---:|:---:|
+| iP  | NA  |  41 |  39 |
+| iP2 | 59  |  NA |  40 |
+| iP3 | 61  |  60 |  NA |
