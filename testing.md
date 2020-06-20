@@ -215,8 +215,6 @@ False
 
 #### Domino would be first in play and result in a score
 
-TODO: OH SHIT
-
 ```
 *Main> scoreNP (2,3) [] 1
 True
